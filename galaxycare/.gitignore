@@ -1,0 +1,53 @@
+/.phpunit.cache
+/bootstrap/ssr
+/node_modules
+/public/build
+/public/fonts-manifest.dev.json
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/resources/js/actions
+/resources/js/routes
+/resources/js/wayfinder
+/vendor
+.DS_Store
+.env
+.env.backup
+.env.production
+.env.local
+.phpactor.json
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/auth.json
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+/.kiro
+
+# OS files
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+
+# IDE
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+storage/logs/*.log
+
+# Debug
+storage/debugbar/
+
+# Compiled
+*.cache
+
+# Tool configs (local)
+boost.json

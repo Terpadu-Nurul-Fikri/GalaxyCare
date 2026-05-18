@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /reports
+Disallow: /notifications
+Disallow: /settings
+Allow: /
+Allow: /progress
+Allow: /forum
