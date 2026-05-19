@@ -141,3 +141,11 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Disable animations globally when toggled off */
+.no-animations *,
+.no-animations *::before,
+.no-animations *::after {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+}
