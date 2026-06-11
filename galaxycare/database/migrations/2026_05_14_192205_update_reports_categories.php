@@ -9,7 +9,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("ALTER TABLE reports MODIFY COLUMN category ENUM('ruang_kelas','laboratorium','toilet','listrik','internet','parkiran','perpustakaan','kantin','gedung','kebersihan','keamanan','pelayanan_akademik','lainnya') DEFAULT 'lainnya'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE reports MODIFY COLUMN category ENUM('ruang_kelas','laboratorium','toilet','listrik','internet','parkiran','perpustakaan','kantin','gedung','kebersihan','keamanan','pelayanan_akademik','lainnya') DEFAULT 'lainnya'");
+        }
 
         Schema::table('reports', function (Blueprint $table) {
             $table->string('priority', 20)->default('medium')->after('status');
@@ -18,7 +20,9 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE reports MODIFY COLUMN category ENUM('kelas','laboratorium','toilet','listrik','internet','parkiran','lainnya') DEFAULT 'lainnya'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE reports MODIFY COLUMN category ENUM('kelas','laboratorium','toilet','listrik','internet','parkiran','lainnya') DEFAULT 'lainnya'");
+        }
 
         Schema::table('reports', function (Blueprint $table) {
             $table->dropColumn('priority');

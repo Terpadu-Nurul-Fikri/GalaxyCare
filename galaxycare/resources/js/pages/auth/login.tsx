@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { LogIn } from 'lucide-react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -28,13 +29,18 @@ export default function Login({
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
+                className="flex flex-col gap-7"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-5">
-                            <div className="grid gap-2">
-                                <Label htmlFor="email">Email Kampus</Label>
+                        <div className="grid gap-5 sm:gap-6">
+                            <div className="grid gap-2.5">
+                                <Label
+                                    htmlFor="email"
+                                    className="font-semibold text-[#43474f]"
+                                >
+                                    Email Kampus
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -44,16 +50,22 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="nim@student.nurulfikri.ac.id"
+                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20"
                                 />
                                 <InputError message={errors.email} />
                             </div>
-                            <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                            <div className="grid gap-2.5">
+                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <Label
+                                        htmlFor="password"
+                                        className="font-semibold text-[#43474f]"
+                                    >
+                                        Password
+                                    </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
-                                            className="ml-auto text-sm"
+                                            className="text-sm font-bold text-[#904d00] decoration-transparent hover:text-[#fd8b00]"
                                             tabIndex={5}
                                         >
                                             Lupa password?
@@ -67,34 +79,46 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
+                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20"
                                 />
                                 <InputError message={errors.password} />
                             </div>
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center gap-3 py-1">
                                 <Checkbox
                                     id="remember"
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Ingat saya</Label>
+                                <Label
+                                    htmlFor="remember"
+                                    className="text-sm font-medium text-[#43474f]"
+                                >
+                                    Ingat saya
+                                </Label>
                             </div>
                             <Button
                                 type="submit"
-                                className="mt-2 w-full bg-blue-600 hover:bg-blue-700"
+                                className="mt-1 h-12 w-full rounded-lg bg-[#003366] text-base font-bold text-white shadow-md shadow-blue-950/15 transition hover:bg-[#001e40]"
                                 tabIndex={4}
                                 disabled={processing}
                             >
-                                {processing && <Spinner />}Masuk
+                                {processing && <Spinner />}
+                                Masuk
+                                <LogIn className="h-4 w-4" />
                             </Button>
                         </div>
-                        <p className="rounded-lg bg-blue-50 p-3 text-center text-xs text-blue-700">
+                        <p className="rounded-lg bg-[#d9e3f7] p-3.5 text-center text-xs leading-5 font-medium text-[#003366]">
                             Gunakan email{' '}
                             <strong>@student.nurulfikri.ac.id</strong>
                         </p>
                         {canRegister && (
-                            <p className="text-center text-sm text-muted-foreground">
+                            <p className="text-center text-sm text-[#43474f]">
                                 Belum punya akun?{' '}
-                                <TextLink href={register()} tabIndex={5}>
+                                <TextLink
+                                    href={register()}
+                                    className="font-bold text-[#001e40] decoration-transparent hover:text-[#904d00]"
+                                    tabIndex={5}
+                                >
                                     Daftar
                                 </TextLink>
                             </p>
@@ -112,6 +136,6 @@ export default function Login({
 }
 
 Login.layout = {
-    title: 'Masuk ke SIPASKA',
-    description: 'Masukkan email kampus dan password Anda',
+    title: 'Selamat Datang',
+    description: 'Silakan masuk menggunakan akun identitas resmi Anda.',
 };

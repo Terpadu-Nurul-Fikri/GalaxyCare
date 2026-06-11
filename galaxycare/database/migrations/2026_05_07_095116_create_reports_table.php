@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -21,15 +22,19 @@ return new class extends Migration
 
             $table->string('photo')->nullable();
 
-            $table->enum('category', [
-                'kelas',
-                'laboratorium',
-                'toilet',
-                'listrik',
-                'internet',
-                'parkiran',
-                'lainnya',
-            ]);
+            if (DB::getDriverName() === 'sqlite') {
+                $table->string('category')->default('lainnya');
+            } else {
+                $table->enum('category', [
+                    'kelas',
+                    'laboratorium',
+                    'toilet',
+                    'listrik',
+                    'internet',
+                    'parkiran',
+                    'lainnya',
+                ]);
+            }
 
             $table->string('location');
 

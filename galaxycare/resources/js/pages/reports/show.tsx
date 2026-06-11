@@ -1,8 +1,12 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ArrowLeft, Calendar, MapPin, Tag, User } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    ArrowLeft,
+    Calendar,
+    CheckCircle,
+    MapPin,
+    Tag,
+    User,
+} from 'lucide-react';
 
 type Report = {
     id: number;
@@ -24,24 +28,24 @@ type Props = {
 
 const statusConfig = {
     pending: {
-        label: 'Pending',
-        variant: 'secondary' as const,
-        color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+        label: 'Menunggu',
+        color: 'bg-amber-100 text-amber-700 border-amber-200',
+        dot: 'bg-amber-400',
     },
     diproses: {
         label: 'Diproses',
-        variant: 'default' as const,
-        color: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+        color: 'bg-blue-100 text-blue-700 border-blue-200',
+        dot: 'bg-blue-400',
     },
     selesai: {
         label: 'Selesai',
-        variant: 'outline' as const,
-        color: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+        color: 'bg-green-100 text-green-700 border-green-200',
+        dot: 'bg-green-400',
     },
     ditolak: {
         label: 'Ditolak',
-        variant: 'destructive' as const,
-        color: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+        color: 'bg-red-100 text-red-700 border-red-200',
+        dot: 'bg-red-400',
     },
 };
 
@@ -69,168 +73,152 @@ export default function ReportsShow({ report }: Props) {
     const teamSlug = currentTeam?.slug ?? '';
     const config = statusConfig[report.status];
 
+    const detailRows = [
+        {
+            icon: Tag,
+            label: 'Kategori',
+            value: categoryLabels[report.category] ?? report.category,
+        },
+        { icon: MapPin, label: 'Lokasi', value: report.location },
+        {
+            icon: Calendar,
+            label: 'Tanggal Lapor',
+            value: new Date(report.created_at).toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            }),
+        },
+        { icon: User, label: 'Pelapor', value: report.user.name },
+    ];
+
     return (
         <>
             <Head title={report.title} />
-            <div className="flex flex-col gap-6 p-4">
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/${teamSlug}/reports`}>
+            <div className="min-h-screen bg-[#f7f9fb]">
+                <div className="border-b border-gray-100 bg-white px-4 py-4 sm:px-6">
+                    <div className="mx-auto flex max-w-5xl items-center gap-3">
+                        <Link
+                            href={`/${teamSlug}/reports`}
+                            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-orange-200 hover:bg-orange-50 hover:text-[#9a4a00]"
+                            aria-label="Kembali ke daftar laporan"
+                        >
                             <ArrowLeft className="h-4 w-4" />
                         </Link>
-                    </Button>
-                    <div className="flex-1">
-                        <h1 className="text-2xl font-bold tracking-tight">
-                            {report.title}
-                        </h1>
+                        <div className="min-w-0 flex-1">
+                            <p className="text-xs font-semibold tracking-wide text-blue-600 uppercase">
+                                Laporan #{report.id}
+                            </p>
+                            <h1 className="mt-0.5 truncate text-lg font-bold text-gray-900 sm:text-xl">
+                                {report.title}
+                            </h1>
+                        </div>
+                        <span
+                            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium ${config.color}`}
+                        >
+                            <span
+                                className={`h-2 w-2 rounded-full ${config.dot}`}
+                            />
+                            {config.label}
+                        </span>
                     </div>
-                    <Badge variant={config.variant} className="text-sm">
-                        {config.label}
-                    </Badge>
                 </div>
 
-                <div className="grid gap-6 lg:grid-cols-3">
-                    {/* Main Content */}
-                    <div className="space-y-6 lg:col-span-2">
-                        {/* Photo */}
-                        {report.photo && (
-                            <Card>
-                                <CardContent className="p-4">
+                <div className="p-4 sm:p-6">
+                    <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-3">
+                        <div className="space-y-5 lg:col-span-2">
+                            {report.photo && (
+                                <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                                     <img
                                         src={`/storage/${report.photo}`}
                                         alt={report.title}
-                                        className="max-h-96 w-full rounded-lg object-cover"
+                                        className="max-h-96 w-full object-cover"
                                     />
-                                </CardContent>
-                            </Card>
-                        )}
+                                </div>
+                            )}
 
-                        {/* Description */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Deskripsi</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="whitespace-pre-wrap text-muted-foreground">
+                            <section className="sipaska-card p-5">
+                                <h2 className="text-sm font-semibold tracking-wide text-gray-500 uppercase">
+                                    Deskripsi
+                                </h2>
+                                <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
                                     {report.description}
                                 </p>
-                            </CardContent>
-                        </Card>
+                            </section>
 
-                        {/* Admin Response */}
-                        {report.admin_response && (
-                            <Card className="border-blue-200 dark:border-blue-800">
-                                <CardHeader>
-                                    <CardTitle className="text-blue-700 dark:text-blue-300">
+                            {report.admin_response && (
+                                <section className="rounded-lg border border-blue-200 bg-blue-50 p-5 shadow-sm">
+                                    <h2 className="text-sm font-semibold tracking-wide text-blue-700 uppercase">
                                         Respons Admin
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <p className="whitespace-pre-wrap text-muted-foreground">
+                                    </h2>
+                                    <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap text-blue-900">
                                         {report.admin_response}
                                     </p>
-                                </CardContent>
-                            </Card>
-                        )}
-                    </div>
+                                </section>
+                            )}
+                        </div>
 
-                    {/* Sidebar Info */}
-                    <div className="space-y-4">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-sm">
+                        <aside className="space-y-4">
+                            <section className="sipaska-card p-5">
+                                <h2 className="mb-4 text-sm font-semibold tracking-wide text-gray-500 uppercase">
                                     Detail Laporan
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="flex items-center gap-3">
-                                    <Tag className="h-4 w-4 text-muted-foreground" />
-                                    <div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Kategori
-                                        </p>
-                                        <p className="text-sm font-medium">
-                                            {categoryLabels[report.category] ??
-                                                report.category}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                                    <div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Lokasi
-                                        </p>
-                                        <p className="text-sm font-medium">
-                                            {report.location}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                                    <div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Tanggal Lapor
-                                        </p>
-                                        <p className="text-sm font-medium">
-                                            {new Date(
-                                                report.created_at,
-                                            ).toLocaleDateString('id-ID', {
-                                                day: 'numeric',
-                                                month: 'long',
-                                                year: 'numeric',
-                                            })}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <User className="h-4 w-4 text-muted-foreground" />
-                                    <div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Pelapor
-                                        </p>
-                                        <p className="text-sm font-medium">
-                                            {report.user.name}
-                                        </p>
-                                    </div>
-                                </div>
-                                {report.resolved_at && (
-                                    <div className="flex items-center gap-3">
-                                        <Calendar className="h-4 w-4 text-green-500" />
-                                        <div>
-                                            <p className="text-xs text-muted-foreground">
-                                                Diselesaikan
-                                            </p>
-                                            <p className="text-sm font-medium">
-                                                {new Date(
-                                                    report.resolved_at,
-                                                ).toLocaleDateString('id-ID', {
-                                                    day: 'numeric',
-                                                    month: 'long',
-                                                    year: 'numeric',
-                                                })}
-                                            </p>
+                                </h2>
+                                <div className="space-y-4">
+                                    {detailRows.map((row) => (
+                                        <div
+                                            key={row.label}
+                                            className="flex items-start gap-3"
+                                        >
+                                            <row.icon className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                                            <div>
+                                                <p className="text-xs text-gray-400">
+                                                    {row.label}
+                                                </p>
+                                                <p className="text-sm font-medium text-gray-900">
+                                                    {row.value}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
-
-                        {/* Status Timeline */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-sm">
-                                    Status
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <div
-                                    className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${config.color}`}
-                                >
-                                    {config.label}
+                                    ))}
+                                    {report.resolved_at && (
+                                        <div className="flex items-start gap-3">
+                                            <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                                            <div>
+                                                <p className="text-xs text-gray-400">
+                                                    Diselesaikan
+                                                </p>
+                                                <p className="text-sm font-medium text-green-700">
+                                                    {new Date(
+                                                        report.resolved_at,
+                                                    ).toLocaleDateString(
+                                                        'id-ID',
+                                                        {
+                                                            day: 'numeric',
+                                                            month: 'long',
+                                                            year: 'numeric',
+                                                        },
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                            </CardContent>
-                        </Card>
+                            </section>
+
+                            <section className="sipaska-card p-5">
+                                <h2 className="mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase">
+                                    Status Saat Ini
+                                </h2>
+                                <span
+                                    className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold ${config.color}`}
+                                >
+                                    <span
+                                        className={`h-2 w-2 rounded-full ${config.dot}`}
+                                    />
+                                    {config.label}
+                                </span>
+                            </section>
+                        </aside>
                     </div>
                 </div>
             </div>

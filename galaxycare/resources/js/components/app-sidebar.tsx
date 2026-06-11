@@ -1,9 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     Bell,
+    CircleHelp,
     ClipboardList,
+    LogOut,
     LayoutGrid,
     PlusCircle,
+    User,
     Shield,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -47,7 +50,7 @@ export function AppSidebar() {
                       icon: PlusCircle,
                   },
                   {
-                      title: 'Laporan Saya',
+                      title: 'Riwayat Laporan',
                       href: `/${teamSlug}/reports`,
                       icon: ClipboardList,
                   },
@@ -56,22 +59,35 @@ export function AppSidebar() {
                       href: `/${teamSlug}/notifications`,
                       icon: Bell,
                   },
+                  {
+                      title: 'Profil',
+                      href: '/settings/profile',
+                      icon: User,
+                  },
               ]),
     ];
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar
+            collapsible="icon"
+            variant="sidebar"
+            className="border-r border-[#12385f] bg-[#001e40] text-white"
+        >
+            <SidebarHeader className="gap-8 px-7 py-8">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
+                        <SidebarMenuButton
+                            size="lg"
+                            asChild
+                            className="h-14 p-0 hover:bg-transparent data-[active=true]:bg-transparent"
+                        >
                             <Link href={dashboardUrl} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-                <SidebarMenu>
+                <SidebarMenu className="group-data-[collapsible=icon]:hidden">
                     <SidebarMenuItem>
                         <TeamSwitcher />
                     </SidebarMenuItem>
@@ -80,7 +96,25 @@ export function AppSidebar() {
             <SidebarContent>
                 <NavMain items={mainNavItems} />
             </SidebarContent>
-            <SidebarFooter>
+            <SidebarFooter className="gap-5 border-t border-white/10 px-7 py-6">
+                <div className="flex flex-col gap-3 group-data-[collapsible=icon]:hidden">
+                    <Link
+                        href="/"
+                        className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+                    >
+                        <CircleHelp className="size-5" />
+                        Bantuan
+                    </Link>
+                    <Link
+                        href="/logout"
+                        method="post"
+                        as="button"
+                        className="flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-orange-200 transition-colors hover:bg-white/10 hover:text-white"
+                    >
+                        <LogOut className="size-5" />
+                        Keluar
+                    </Link>
+                </div>
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

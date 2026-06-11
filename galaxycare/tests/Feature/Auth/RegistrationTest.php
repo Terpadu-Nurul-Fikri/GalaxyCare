@@ -21,14 +21,14 @@ class RegistrationTest extends TestCase
     {
         $response = $this->post(route('register.store'), [
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test@student.nurulfikri.ac.id',
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
 
         $this->assertAuthenticated();
 
-        $user = User::where('email', 'test@example.com')->first();
+        $user = User::where('email', 'test@student.nurulfikri.ac.id')->first();
         $response->assertRedirect(route('dashboard'));
     }
 }

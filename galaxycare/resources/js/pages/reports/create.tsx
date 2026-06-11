@@ -1,16 +1,7 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { ArrowLeft, Upload } from 'lucide-react';
-import { type FormEvent, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { ArrowLeft, Upload, X } from 'lucide-react';
+import { useRef, useState } from 'react';
+import type { FormEvent } from 'react';
 
 const categories = [
     { value: 'ruang_kelas', label: 'Ruang Kelas' },
@@ -26,6 +17,27 @@ const categories = [
     { value: 'keamanan', label: 'Keamanan' },
     { value: 'pelayanan_akademik', label: 'Pelayanan Akademik' },
     { value: 'lainnya', label: 'Lainnya' },
+];
+
+const priorities = [
+    {
+        value: 'low',
+        label: 'Rendah',
+        activeClass:
+            'border-green-300 bg-green-50 text-green-700 ring-2 ring-green-200',
+    },
+    {
+        value: 'medium',
+        label: 'Sedang',
+        activeClass:
+            'border-yellow-300 bg-yellow-50 text-yellow-700 ring-2 ring-yellow-200',
+    },
+    {
+        value: 'high',
+        label: 'Tinggi',
+        activeClass:
+            'border-red-300 bg-red-50 text-red-700 ring-2 ring-red-200',
+    },
 ];
 
 export default function ReportsCreate() {
@@ -48,12 +60,22 @@ export default function ReportsCreate() {
     function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0] ?? null;
         setData('photo', file);
+
         if (file) {
             const reader = new FileReader();
             reader.onload = (ev) => setPreview(ev.target?.result as string);
             reader.readAsDataURL(file);
         } else {
             setPreview(null);
+        }
+    }
+
+    function clearPhoto() {
+        setData('photo', null);
+        setPreview(null);
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
         }
     }
 
@@ -65,232 +87,269 @@ export default function ReportsCreate() {
         });
     }
 
+    const inputClass =
+        'sipaska-focus w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-[#001e40] placeholder:text-slate-400 transition-all focus:border-[#fd8b00]';
+
     return (
         <>
             <Head title="Buat Laporan" />
-            <div className="flex flex-col gap-6 p-4">
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/${teamSlug}/reports`}>
+            <div className="min-h-screen bg-[#f7f9fb]">
+                {/* Top bar */}
+                <div className="border-b border-gray-100 bg-white px-4 py-4 sm:px-6">
+                    <div className="flex items-center gap-3">
+                        <Link
+                            href={`/${teamSlug}/reports`}
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-orange-200 hover:bg-orange-50 hover:text-[#9a4a00]"
+                        >
                             <ArrowLeft className="h-4 w-4" />
                         </Link>
-                    </Button>
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight">
-                            Buat Laporan Baru
-                        </h1>
-                        <p className="text-muted-foreground">
-                            Laporkan kerusakan fasilitas kampus yang Anda
-                            temukan.
-                        </p>
+                        <div>
+                            <h1 className="text-lg font-bold text-gray-900">
+                                Buat Laporan Baru
+                            </h1>
+                            <p className="text-sm text-gray-500">
+                                Laporkan kerusakan fasilitas kampus yang Anda
+                                temukan.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <Card className="max-w-2xl">
-                    <CardHeader>
-                        <CardTitle>Detail Laporan</CardTitle>
-                        <CardDescription>
-                            Isi informasi selengkap mungkin agar proses
-                            penanganan lebih cepat.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={submit} className="space-y-6">
-                            {/* Title */}
-                            <div className="space-y-2">
-                                <Label htmlFor="title">Judul Laporan</Label>
-                                <Input
-                                    id="title"
-                                    value={data.title}
-                                    onChange={(e) =>
-                                        setData('title', e.target.value)
-                                    }
-                                    placeholder="Contoh: AC Rusak di Ruang 301"
-                                />
-                                {errors.title && (
-                                    <p className="text-sm text-destructive">
-                                        {errors.title}
-                                    </p>
-                                )}
+                <div className="p-4 sm:p-6">
+                    <div className="mx-auto max-w-2xl">
+                        <div className="animate-sipaska-slide-up rounded-lg border border-slate-200 bg-white shadow-sm">
+                            <div className="border-b border-gray-100 px-5 py-4">
+                                <h2 className="font-semibold text-gray-900">
+                                    Detail Laporan
+                                </h2>
+                                <p className="mt-0.5 text-sm text-gray-500">
+                                    Isi informasi selengkap mungkin agar proses
+                                    penanganan lebih cepat.
+                                </p>
                             </div>
 
-                            {/* Category */}
-                            <div className="space-y-2">
-                                <Label htmlFor="category">Kategori</Label>
-                                <select
-                                    id="category"
-                                    value={data.category}
-                                    onChange={(e) =>
-                                        setData('category', e.target.value)
-                                    }
-                                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
-                                >
-                                    <option value="">Pilih kategori...</option>
-                                    {categories.map((cat) => (
-                                        <option
-                                            key={cat.value}
-                                            value={cat.value}
-                                        >
-                                            {cat.label}
-                                        </option>
-                                    ))}
-                                </select>
-                                {errors.category && (
-                                    <p className="text-sm text-destructive">
-                                        {errors.category}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Location */}
-                            <div className="space-y-2">
-                                <Label htmlFor="location">Lokasi</Label>
-                                <Input
-                                    id="location"
-                                    value={data.location}
-                                    onChange={(e) =>
-                                        setData('location', e.target.value)
-                                    }
-                                    placeholder="Contoh: Gedung A, Lantai 3, Ruang 301"
-                                />
-                                {errors.location && (
-                                    <p className="text-sm text-destructive">
-                                        {errors.location}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Description */}
-                            <div className="space-y-2">
-                                <Label htmlFor="description">Deskripsi</Label>
-                                <textarea
-                                    id="description"
-                                    value={data.description}
-                                    onChange={(e) =>
-                                        setData('description', e.target.value)
-                                    }
-                                    placeholder="Jelaskan kerusakan yang Anda temukan secara detail..."
-                                    rows={4}
-                                    className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
-                                />
-                                {errors.description && (
-                                    <p className="text-sm text-destructive">
-                                        {errors.description}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Priority */}
-                            <div className="space-y-2">
-                                <Label htmlFor="priority">
-                                    Tingkat Urgensi
-                                </Label>
-                                <div className="grid grid-cols-3 gap-3">
-                                    {[
-                                        {
-                                            value: 'low',
-                                            label: 'Rendah',
-                                            color: 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400',
-                                        },
-                                        {
-                                            value: 'medium',
-                                            label: 'Sedang',
-                                            color: 'border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
-                                        },
-                                        {
-                                            value: 'high',
-                                            label: 'Tinggi',
-                                            color: 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400',
-                                        },
-                                    ].map((p) => (
-                                        <button
-                                            key={p.value}
-                                            type="button"
-                                            onClick={() =>
-                                                setData('priority', p.value)
-                                            }
-                                            className={`rounded-lg border-2 px-3 py-2 text-sm font-medium transition-all ${
-                                                data.priority === p.value
-                                                    ? p.color +
-                                                      ' ring-2 ring-current ring-offset-1'
-                                                    : 'border-muted bg-background text-muted-foreground hover:border-foreground/20'
-                                            }`}
-                                        >
-                                            {p.label}
-                                        </button>
-                                    ))}
-                                </div>
-                                {errors.priority && (
-                                    <p className="text-sm text-destructive">
-                                        {errors.priority}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Photo Upload */}
-                            <div className="space-y-2">
-                                <Label>Foto (Opsional)</Label>
-                                <div
-                                    className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25 p-6 transition-colors hover:border-muted-foreground/50"
-                                    onClick={() =>
-                                        fileInputRef.current?.click()
-                                    }
-                                    onKeyDown={(e) =>
-                                        e.key === 'Enter' &&
-                                        fileInputRef.current?.click()
-                                    }
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-label="Upload foto"
-                                >
-                                    {preview ? (
-                                        <img
-                                            src={preview}
-                                            alt="Preview"
-                                            className="max-h-48 rounded-md object-cover"
-                                        />
-                                    ) : (
-                                        <>
-                                            <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
-                                            <p className="text-sm text-muted-foreground">
-                                                Klik untuk upload foto
-                                            </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                JPG, PNG, WebP (maks. 2MB)
-                                            </p>
-                                        </>
+                            <form onSubmit={submit} className="space-y-5 p-5">
+                                {/* Title */}
+                                <div>
+                                    <label
+                                        htmlFor="title"
+                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                    >
+                                        Judul Laporan{' '}
+                                        <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        id="title"
+                                        type="text"
+                                        value={data.title}
+                                        onChange={(e) =>
+                                            setData('title', e.target.value)
+                                        }
+                                        placeholder="Contoh: AC Rusak di Ruang 301"
+                                        className={inputClass}
+                                    />
+                                    {errors.title && (
+                                        <p className="mt-1.5 text-xs text-red-500">
+                                            {errors.title}
+                                        </p>
                                     )}
                                 </div>
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/jpeg,image/png,image/webp"
-                                    onChange={handlePhotoChange}
-                                    className="hidden"
-                                />
-                                {errors.photo && (
-                                    <p className="text-sm text-destructive">
-                                        {errors.photo}
-                                    </p>
-                                )}
-                            </div>
 
-                            {/* Submit */}
-                            <div className="flex gap-3">
-                                <Button type="submit" disabled={processing}>
-                                    {processing
-                                        ? 'Mengirim...'
-                                        : 'Kirim Laporan'}
-                                </Button>
-                                <Button type="button" variant="outline" asChild>
-                                    <Link href={`/${teamSlug}/reports`}>
+                                {/* Category */}
+                                <div>
+                                    <label
+                                        htmlFor="category"
+                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                    >
+                                        Kategori{' '}
+                                        <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        id="category"
+                                        value={data.category}
+                                        onChange={(e) =>
+                                            setData('category', e.target.value)
+                                        }
+                                        className={inputClass}
+                                    >
+                                        <option value="">
+                                            Pilih kategori...
+                                        </option>
+                                        {categories.map((cat) => (
+                                            <option
+                                                key={cat.value}
+                                                value={cat.value}
+                                            >
+                                                {cat.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.category && (
+                                        <p className="mt-1.5 text-xs text-red-500">
+                                            {errors.category}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Location */}
+                                <div>
+                                    <label
+                                        htmlFor="location"
+                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                    >
+                                        Lokasi{' '}
+                                        <span className="text-red-500">*</span>
+                                    </label>
+                                    <input
+                                        id="location"
+                                        type="text"
+                                        value={data.location}
+                                        onChange={(e) =>
+                                            setData('location', e.target.value)
+                                        }
+                                        placeholder="Contoh: Gedung A, Lantai 3, Ruang 301"
+                                        className={inputClass}
+                                    />
+                                    {errors.location && (
+                                        <p className="mt-1.5 text-xs text-red-500">
+                                            {errors.location}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Description */}
+                                <div>
+                                    <label
+                                        htmlFor="description"
+                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                    >
+                                        Deskripsi{' '}
+                                        <span className="text-red-500">*</span>
+                                    </label>
+                                    <textarea
+                                        id="description"
+                                        value={data.description}
+                                        onChange={(e) =>
+                                            setData(
+                                                'description',
+                                                e.target.value,
+                                            )
+                                        }
+                                        placeholder="Jelaskan kerusakan yang Anda temukan secara detail..."
+                                        rows={4}
+                                        className={inputClass}
+                                    />
+                                    {errors.description && (
+                                        <p className="mt-1.5 text-xs text-red-500">
+                                            {errors.description}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Priority */}
+                                <div>
+                                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                                        Tingkat Urgensi
+                                    </label>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {priorities.map((p) => (
+                                            <button
+                                                key={p.value}
+                                                type="button"
+                                                onClick={() =>
+                                                    setData('priority', p.value)
+                                                }
+                                                className={`rounded-xl border-2 py-2.5 text-sm font-medium transition-all ${
+                                                    data.priority === p.value
+                                                        ? p.activeClass
+                                                        : 'border-slate-200 text-slate-500 hover:border-orange-200 hover:bg-orange-50'
+                                                }`}
+                                            >
+                                                {p.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Photo Upload */}
+                                <div>
+                                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                                        Foto{' '}
+                                        <span className="font-normal text-gray-400">
+                                            (opsional)
+                                        </span>
+                                    </label>
+                                    {preview ? (
+                                        <div className="relative overflow-hidden rounded-xl border border-gray-200">
+                                            <img
+                                                src={preview}
+                                                alt="Preview"
+                                                className="max-h-52 w-full object-cover"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={clearPhoto}
+                                                className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white shadow-md transition-colors hover:bg-red-600"
+                                                aria-label="Hapus foto"
+                                            >
+                                                <X className="h-3.5 w-3.5" />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                fileInputRef.current?.click()
+                                            }
+                                            className="flex w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 bg-slate-50 p-8 text-center transition-colors hover:border-orange-300 hover:bg-orange-50"
+                                        >
+                                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm">
+                                                <Upload className="h-5 w-5 text-[#fd8b00]" />
+                                            </div>
+                                            <p className="mt-3 text-sm font-medium text-gray-700">
+                                                Klik untuk upload foto
+                                            </p>
+                                            <p className="mt-1 text-xs text-gray-400">
+                                                JPG, PNG, WebP - maks. 2MB
+                                            </p>
+                                        </button>
+                                    )}
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/webp"
+                                        onChange={handlePhotoChange}
+                                        className="hidden"
+                                    />
+                                    {errors.photo && (
+                                        <p className="mt-1.5 text-xs text-red-500">
+                                            {errors.photo}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Submit */}
+                                <div className="flex gap-3 pt-2">
+                                    <button
+                                        type="submit"
+                                        disabled={processing}
+                                        className="inline-flex items-center gap-2 rounded-lg bg-[#fd8b00] px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-orange-600 hover:shadow-md disabled:opacity-50"
+                                    >
+                                        {processing
+                                            ? 'Mengirim...'
+                                            : 'Kirim Laporan'}
+                                    </button>
+                                    <Link
+                                        href={`/${teamSlug}/reports`}
+                                        className="inline-flex items-center rounded-lg border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:border-slate-300 hover:bg-slate-50"
+                                    >
                                         Batal
                                     </Link>
-                                </Button>
-                            </div>
-                        </form>
-                    </CardContent>
-                </Card>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     );

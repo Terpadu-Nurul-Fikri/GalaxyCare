@@ -4,8 +4,12 @@ const STORAGE_KEY = 'sipaska-animations';
 
 export function useAnimations() {
     const [enabled, setEnabled] = useState(() => {
-        if (typeof window === 'undefined') return true;
+        if (typeof window === 'undefined') {
+return true;
+}
+
         const stored = localStorage.getItem(STORAGE_KEY);
+
         return stored === null ? true : stored === '1';
     });
 

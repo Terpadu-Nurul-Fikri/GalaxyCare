@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Reports\UpdateReportStatusRequest;
 use App\Models\Notification;
 use App\Models\Report;
+use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -50,7 +51,7 @@ class AdminReportController extends Controller
         ]);
     }
 
-    public function show(Report $report): Response
+    public function show(Team $currentTeam, Report $report): Response
     {
         $report->load('user');
 
@@ -59,7 +60,7 @@ class AdminReportController extends Controller
         ]);
     }
 
-    public function update(UpdateReportStatusRequest $request, Report $report): RedirectResponse
+    public function update(UpdateReportStatusRequest $request, Team $currentTeam, Report $report): RedirectResponse
     {
         $data = $request->validated();
 
