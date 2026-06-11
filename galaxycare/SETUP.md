@@ -35,7 +35,7 @@ Laravel 13 • React 19 • Inertia.js v3 • Tailwind CSS v4 • MySQL
 
 ```bash
 git clone <repo-url>
-cd sipaska
+cd galaxycare
 composer install
 npm install
 cp .env.example .env
