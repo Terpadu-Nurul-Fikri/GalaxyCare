@@ -13,10 +13,15 @@ use Illuminate\Support\Facades\Route;
 
 // Public pages
 Route::get('/', HomeController::class)->name('home');
-Route::get('/progress', [HomeController::class, 'progress'])->name('progress');
+
+// Protected pages (require login)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/progress', [HomeController::class, 'progress'])->name('progress');
+    Route::get('/forum', [AnonymousFeedbackController::class, 'index'])->name('forum');
+    Route::post('/forum', [AnonymousFeedbackController::class, 'store'])->name('forum.store');
+});
+
 Route::redirect('/proress', '/progress');
-Route::get('/forum', [AnonymousFeedbackController::class, 'index'])->name('forum');
-Route::post('/forum', [AnonymousFeedbackController::class, 'store'])->name('forum.store');
 
 // Authenticated routes
 Route::prefix('{current_team}')
