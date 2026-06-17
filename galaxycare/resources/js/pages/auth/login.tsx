@@ -37,7 +37,7 @@ export default function Login({
                             <div className="grid gap-2.5">
                                 <Label
                                     htmlFor="email"
-                                    className="font-semibold text-[#43474f]"
+                                    className="font-semibold text-[#43474f] dark:text-slate-200"
                                 >
                                     Email Kampus
                                 </Label>
@@ -50,7 +50,7 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="nim@student.nurulfikri.ac.id"
-                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20"
+                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -58,14 +58,14 @@ export default function Login({
                                 <div className="flex flex-wrap items-center justify-between gap-2">
                                     <Label
                                         htmlFor="password"
-                                        className="font-semibold text-[#43474f]"
+                                        className="font-semibold text-[#43474f] dark:text-slate-200"
                                     >
                                         Password
                                     </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
-                                            className="text-sm font-bold text-[#904d00] decoration-transparent hover:text-[#fd8b00]"
+                                            className="text-sm font-bold text-[#904d00] decoration-transparent hover:text-[#fd8b00] dark:text-orange-300 dark:hover:text-orange-200"
                                             tabIndex={5}
                                         >
                                             Lupa password?
@@ -79,7 +79,7 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
-                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20"
+                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -91,7 +91,7 @@ export default function Login({
                                 />
                                 <Label
                                     htmlFor="remember"
-                                    className="text-sm font-medium text-[#43474f]"
+                                    className="text-sm font-medium text-[#43474f] dark:text-slate-300"
                                 >
                                     Ingat saya
                                 </Label>
@@ -107,16 +107,16 @@ export default function Login({
                                 <LogIn className="h-4 w-4" />
                             </Button>
                         </div>
-                        <p className="rounded-lg bg-[#d9e3f7] p-3.5 text-center text-xs leading-5 font-medium text-[#003366]">
+                        <p className="rounded-lg bg-[#d9e3f7] p-3.5 text-center text-xs leading-5 font-medium text-[#003366] dark:bg-slate-800 dark:text-slate-200">
                             Gunakan email{' '}
                             <strong>@student.nurulfikri.ac.id</strong>
                         </p>
                         {canRegister && (
-                            <p className="text-center text-sm text-[#43474f]">
+                            <p className="text-center text-sm text-[#43474f] dark:text-slate-300">
                                 Belum punya akun?{' '}
                                 <TextLink
                                     href={register()}
-                                    className="font-bold text-[#001e40] decoration-transparent hover:text-[#904d00]"
+                                    className="font-bold text-[#001e40] decoration-transparent hover:text-[#904d00] dark:text-white dark:hover:text-orange-300"
                                     tabIndex={5}
                                 >
                                     Daftar

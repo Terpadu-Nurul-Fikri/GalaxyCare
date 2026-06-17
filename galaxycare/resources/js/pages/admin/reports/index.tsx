@@ -6,6 +6,7 @@ import {
     Eye,
     FileText,
     Search,
+    Trash2,
     X,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -48,22 +49,22 @@ type Props = {
 const statusConfig = {
     pending: {
         label: 'Menunggu',
-        color: 'bg-amber-100 text-amber-700 border-amber-200',
-        dot: 'bg-amber-400',
+        color: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/50 dark:text-amber-200 dark:border-amber-900/50',
+        dot: 'bg-amber-500',
     },
     diproses: {
         label: 'Diproses',
-        color: 'bg-blue-100 text-blue-700 border-blue-200',
-        dot: 'bg-blue-400',
+        color: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/50 dark:text-blue-200 dark:border-blue-900/50',
+        dot: 'bg-blue-500',
     },
     selesai: {
         label: 'Selesai',
-        color: 'bg-green-100 text-green-700 border-green-200',
+        color: 'bg-green-100 text-green-700 border-green-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-900/50',
         dot: 'bg-green-400',
     },
     ditolak: {
         label: 'Ditolak',
-        color: 'bg-red-100 text-red-700 border-red-200',
+        color: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950/50 dark:text-red-200 dark:border-red-900/50',
         dot: 'bg-red-400',
     },
 };
@@ -90,41 +91,41 @@ const statCards = [
         key: undefined,
         icon: FileText,
         label: 'Total',
-        iconColor: 'text-blue-600',
-        bg: 'bg-blue-50',
-        border: 'border-blue-100',
+        iconColor: 'text-primary',
+        bg: 'bg-primary/10',
+        border: 'border-primary/20',
     },
     {
         key: 'pending',
         icon: Clock,
         label: 'Menunggu',
         iconColor: 'text-amber-600',
-        bg: 'bg-amber-50',
-        border: 'border-amber-100',
+        bg: 'bg-amber-50 dark:bg-amber-900/20',
+        border: 'border-amber-100 dark:border-amber-900/40',
     },
     {
         key: 'diproses',
         icon: AlertCircle,
         label: 'Diproses',
-        iconColor: 'text-indigo-600',
-        bg: 'bg-indigo-50',
-        border: 'border-indigo-100',
+        iconColor: 'text-sky-700 dark:text-sky-200',
+        bg: 'bg-sky-50 dark:bg-sky-950/30',
+        border: 'border-sky-100 dark:border-sky-900/40',
     },
     {
         key: 'selesai',
         icon: CheckCircle,
         label: 'Selesai',
-        iconColor: 'text-green-600',
-        bg: 'bg-green-50',
-        border: 'border-green-100',
+        iconColor: 'text-emerald-600',
+        bg: 'bg-emerald-50 dark:bg-emerald-900/20',
+        border: 'border-emerald-100 dark:border-emerald-900/40',
     },
     {
         key: 'ditolak',
         icon: AlertCircle,
         label: 'Ditolak',
-        iconColor: 'text-red-600',
-        bg: 'bg-red-50',
-        border: 'border-red-100',
+        iconColor: 'text-rose-600',
+        bg: 'bg-rose-50 dark:bg-rose-900/20',
+        border: 'border-rose-100 dark:border-rose-900/40',
     },
 ] as const;
 
@@ -172,26 +173,26 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
     return (
         <>
             <Head title="Kelola Laporan" />
-            <div className="min-h-screen bg-[#f7f9fb]">
+            <div className="min-h-screen bg-background text-foreground">
                 {/* Header Banner */}
-                <div className="bg-[#001e40] px-6 py-8">
-                    <div>
-                        <p className="text-sm font-medium text-orange-200">
+                <div className="border-b border-slate-200 bg-[#003366] px-6 py-10 shadow-lg dark:border-slate-800 dark:bg-slate-900">
+                    <div className="mx-auto max-w-7xl">
+                        <p className="text-sm font-bold tracking-wider text-primary uppercase">
                             Panel Admin
                         </p>
-                        <h1 className="mt-1 text-2xl font-bold text-white sm:text-3xl">
-                            Kelola Laporan
+                        <h1 className="mt-1 text-3xl font-extrabold text-foreground sm:text-4xl">
+                            Kelola Laporan Fasilitas
                         </h1>
-                        <p className="mt-1 text-sm text-blue-100">
-                            Tinjau, perbarui status, dan respons laporan
-                            pengaduan.
+                        <p className="mt-2 max-w-2xl text-muted-foreground">
+                            Tinjau, perbarui status, dan berikan respons resmi
+                            untuk setiap laporan pengaduan dari mahasiswa.
                         </p>
                     </div>
                 </div>
 
-                <div className="p-4 sm:p-6">
+                <div className="mx-auto max-w-7xl p-4 sm:p-6">
                     {/* Stat Cards */}
-                    <div className="-mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
+                    <div className="-mt-12 grid grid-cols-2 gap-4 sm:grid-cols-5">
                         {statCards.map((card) => {
                             const val =
                                 card.key === undefined
@@ -206,19 +207,19 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
                                     key={card.label}
                                     type="button"
                                     onClick={() => filterByStatus(card.key)}
-                                    className={`rounded-lg border bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md ${isActive ? `${card.border} ring-2 ring-[#fd8b00]/25 ring-offset-1` : 'border-slate-200'}`}
+                                    className={`rounded-xl border bg-card p-5 text-left shadow-sm transition-all hover:-translate-y-1 ${isActive ? `border-accent ring-2 ring-accent/20` : 'border-border'}`}
                                 >
                                     <div
-                                        className={`flex h-9 w-9 items-center justify-center rounded-xl ${card.bg}`}
+                                        className={`flex h-10 w-10 items-center justify-center rounded-xl ${card.bg}`}
                                     >
                                         <card.icon
-                                            className={`h-4 w-4 ${card.iconColor}`}
+                                            className={`h-5 w-5 ${card.iconColor}`}
                                         />
                                     </div>
-                                    <p className="mt-3 text-2xl font-bold text-gray-900">
+                                    <p className="mt-4 text-3xl font-extrabold text-foreground">
                                         {val}
                                     </p>
-                                    <p className="text-xs font-medium text-gray-500">
+                                    <p className="text-xs font-bold text-muted-foreground uppercase">
                                         {card.label}
                                     </p>
                                 </button>
@@ -227,23 +228,23 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
                     </div>
 
                     {/* Filters */}
-                    <div className="mt-6 flex flex-wrap items-center gap-3">
+                    <div className="mt-10 flex flex-wrap items-center gap-4">
                         <form
                             onSubmit={handleSearch}
                             className="flex items-center gap-2"
                         >
                             <div className="relative">
-                                <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                                <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                 <input
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     placeholder="Cari judul atau lokasi..."
-                                    className="sipaska-focus h-9 w-56 rounded-lg border border-slate-200 bg-white pr-3 pl-9 text-sm text-[#001e40] placeholder:text-slate-400 focus:border-[#fd8b00]"
+                                    className="sipaska-focus h-11 w-64 rounded-xl border border-border bg-card pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground"
                                 />
                             </div>
                             <button
                                 type="submit"
-                                className="h-9 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 transition-colors hover:border-orange-300 hover:bg-orange-50 hover:text-[#9a4a00]"
+                                className="h-11 rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground transition hover:opacity-90"
                             >
                                 Cari
                             </button>
@@ -254,7 +255,7 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
                             onChange={(e) =>
                                 filterByCategory(e.target.value || undefined)
                             }
-                            className="sipaska-focus h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-700 focus:border-[#fd8b00]"
+                            className="sipaska-focus h-11 rounded-xl border border-border bg-card px-4 text-sm font-bold text-foreground"
                         >
                             <option value="">Semua Kategori</option>
                             {Object.entries(categoryLabels).map(
@@ -273,63 +274,72 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
                                     setSearch('');
                                     router.get(`/${teamSlug}/admin/reports`);
                                 }}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-500 transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                                className="inline-flex h-11 items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/10 px-5 text-sm font-bold text-destructive transition hover:bg-destructive hover:text-destructive-foreground"
                             >
-                                <X className="h-3.5 w-3.5" />
-                                Reset
+                                <X className="h-4 w-4" />
+                                Reset Filter
                             </button>
                         )}
                     </div>
 
                     {/* Reports List */}
-                    <div className="mt-6">
+                    <div className="mt-8">
                         {reports.data.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-white p-16 text-center">
-                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-50">
-                                    <FileText className="h-7 w-7 text-gray-300" />
+                            <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border bg-card p-20 text-center">
+                                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+                                    <FileText className="h-8 w-8 text-muted-foreground" />
                                 </div>
-                                <p className="mt-4 font-medium text-gray-500">
-                                    Tidak ada laporan
+                                <p className="mt-6 text-lg font-bold text-foreground">
+                                    Tidak ada laporan ditemukan
                                 </p>
-                                <p className="mt-1 text-sm text-gray-400">
-                                    Coba ubah atau reset filter pencarian.
+                                <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                                    Coba gunakan kata kunci lain atau bersihkan
+                                    filter untuk melihat semua laporan.
                                 </p>
                             </div>
                         ) : (
-                            <div className="space-y-2">
+                            <div className="grid gap-3">
                                 {reports.data.map((report) => {
                                     const cfg = statusConfig[report.status];
 
                                     return (
-                                        <Link
+                                        <div
                                             key={report.id}
-                                            href={`/${teamSlug}/admin/reports/${report.id}`}
                                             className="sipaska-card group flex items-center justify-between p-4"
                                         >
-                                            <div className="flex min-w-0 flex-1 items-center gap-3">
-                                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#003366]/10 group-hover:bg-[#003366]/15">
-                                                    <FileText className="h-5 w-5 text-[#003366]" />
+                                            <Link
+                                                href={`/${teamSlug}/admin/reports/${report.id}`}
+                                                className="flex min-w-0 flex-1 items-center gap-4"
+                                            >
+                                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
+                                                    <FileText className="h-6 w-6" />
                                                 </div>
                                                 <div className="min-w-0">
-                                                    <p className="truncate font-semibold text-[#001e40] group-hover:text-[#9a4a00]">
+                                                    <p className="truncate text-base font-extrabold text-foreground transition-colors group-hover:text-primary">
                                                         {report.title}
                                                     </p>
-                                                    <p className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-gray-400">
-                                                        <span>
+                                                    <p className="mt-1 flex flex-wrap items-center gap-x-2 text-xs font-medium text-muted-foreground">
+                                                        <span className="font-bold text-primary/80">
                                                             {report.user.name}
                                                         </span>
-                                                        <span>|</span>
+                                                        <span className="opacity-40">
+                                                            •
+                                                        </span>
                                                         <span>
                                                             {categoryLabels[
                                                                 report.category
                                                             ] ??
                                                                 report.category}
                                                         </span>
-                                                        <span>|</span>
+                                                        <span className="opacity-40">
+                                                            •
+                                                        </span>
                                                         <span>
                                                             {report.location}
                                                         </span>
-                                                        <span>|</span>
+                                                        <span className="opacity-40">
+                                                            •
+                                                        </span>
                                                         <span>
                                                             {new Date(
                                                                 report.created_at,
@@ -344,43 +354,64 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
                                                         </span>
                                                     </p>
                                                 </div>
-                                            </div>
+                                            </Link>
                                             <div className="ml-4 flex items-center gap-3">
                                                 <span
-                                                    className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium ${cfg.color}`}
+                                                    className={`hidden items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold uppercase sm:inline-flex ${cfg.color}`}
                                                 >
                                                     <span
                                                         className={`h-1.5 w-1.5 rounded-full ${cfg.dot}`}
                                                     />
                                                     {cfg.label}
                                                 </span>
-                                                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition-colors group-hover:border-blue-200 group-hover:bg-blue-50 group-hover:text-blue-600">
-                                                    <Eye className="h-4 w-4" />
+                                                <div className="flex items-center gap-2">
+                                                    <Link
+                                                        href={`/${teamSlug}/admin/reports/${report.id}`}
+                                                        className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:border-primary/50 hover:bg-muted hover:text-primary"
+                                                    >
+                                                        <Eye className="h-4 w-4" />
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => {
+                                                            if (
+                                                                confirm(
+                                                                    'Admin: Hapus laporan ini secara permanen?',
+                                                                )
+                                                            ) {
+                                                                router.delete(
+                                                                    `/${teamSlug}/admin/reports/${report.id}`,
+                                                                );
+                                                            }
+                                                        }}
+                                                        className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-destructive/20 bg-destructive/5 text-destructive transition-colors hover:bg-destructive hover:text-destructive-foreground"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </Link>
+                                        </div>
                                     );
                                 })}
                             </div>
                         )}
 
                         {reports.last_page > 1 && (
-                            <div className="mt-6 flex items-center justify-center gap-2">
+                            <div className="mt-10 flex items-center justify-center gap-3">
                                 {reports.prev_page_url && (
                                     <Link
                                         href={reports.prev_page_url}
-                                        className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                                        className="rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-bold text-foreground transition-colors hover:bg-muted"
                                     >
                                         Sebelumnya
                                     </Link>
                                 )}
-                                <span className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm">
+                                <span className="rounded-xl bg-primary/10 px-5 py-2.5 text-sm font-extrabold text-primary">
                                     {reports.current_page} / {reports.last_page}
                                 </span>
                                 {reports.next_page_url && (
                                     <Link
                                         href={reports.next_page_url}
-                                        className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+                                        className="rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-bold text-foreground transition-colors hover:bg-muted"
                                     >
                                         Selanjutnya
                                     </Link>

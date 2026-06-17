@@ -1,10 +1,11 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     Calendar,
     CheckCircle,
     MapPin,
     Tag,
+    Trash2,
     User,
 } from 'lucide-react';
 import type { FormEvent } from 'react';
@@ -29,30 +30,30 @@ type Props = { report: Report };
 const statusConfig = {
     pending: {
         label: 'Menunggu',
-        color: 'bg-amber-100 text-amber-700 border-amber-200',
+        color: 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/50 dark:text-amber-200 dark:border-amber-900/50',
         dot: 'bg-amber-400',
     },
     diproses: {
         label: 'Diproses',
-        color: 'bg-blue-100 text-blue-700 border-blue-200',
+        color: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950/50 dark:text-blue-200 dark:border-blue-900/50',
         dot: 'bg-blue-400',
     },
     selesai: {
         label: 'Selesai',
-        color: 'bg-green-100 text-green-700 border-green-200',
+        color: 'bg-green-100 text-green-700 border-green-200 dark:bg-emerald-950/50 dark:text-emerald-200 dark:border-emerald-900/50',
         dot: 'bg-green-400',
     },
     ditolak: {
         label: 'Ditolak',
-        color: 'bg-red-100 text-red-700 border-red-200',
+        color: 'bg-red-100 text-red-700 border-red-200 dark:bg-red-950/50 dark:text-red-200 dark:border-red-900/50',
         dot: 'bg-red-400',
     },
 };
 
 const priorityConfig = {
-    low: { label: 'Rendah', color: 'bg-green-100 text-green-700' },
-    medium: { label: 'Sedang', color: 'bg-yellow-100 text-yellow-700' },
-    high: { label: 'Tinggi', color: 'bg-red-100 text-red-700' },
+    low: { label: 'Rendah', color: 'bg-emerald-100 text-emerald-700' },
+    medium: { label: 'Sedang', color: 'bg-amber-100 text-amber-700' },
+    high: { label: 'Tinggi', color: 'bg-rose-100 text-rose-700' },
 };
 
 const categoryLabels: Record<string, string> = {
@@ -90,29 +91,35 @@ export default function AdminReportsShow({ report }: Props) {
         patch(`/${teamSlug}/admin/reports/${report.id}`);
     }
 
+    function deleteReport() {
+        if (confirm('Admin: Hapus laporan ini secara permanen?')) {
+            router.delete(`/${teamSlug}/admin/reports/${report.id}`);
+        }
+    }
+
     return (
         <>
             <Head title={`Admin - ${report.title}`} />
-            <div className="min-h-screen bg-[#f7f9fb]">
+            <div className="min-h-screen bg-background text-foreground">
                 {/* Top bar */}
-                <div className="border-b border-gray-100 bg-white px-4 py-4 sm:px-6">
+                <div className="border-b border-border bg-card px-4 py-4 sm:px-6">
                     <div className="flex items-center gap-3">
                         <Link
                             href={`/${teamSlug}/admin/reports`}
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-orange-200 hover:bg-orange-50 hover:text-[#9a4a00]"
+                            className="flex h-9 w-9 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:bg-muted"
                         >
                             <ArrowLeft className="h-4 w-4" />
                         </Link>
                         <div className="min-w-0 flex-1">
-                            <p className="text-xs font-medium tracking-wide text-gray-400 uppercase">
-                                Laporan #{report.id}
+                            <p className="text-xs font-bold tracking-wide text-primary uppercase">
+                                Panel Admin / Laporan #{report.id}
                             </p>
-                            <h1 className="mt-0.5 truncate text-lg font-bold text-gray-900">
+                            <h1 className="mt-0.5 truncate text-lg font-extrabold text-foreground sm:text-xl">
                                 {report.title}
                             </h1>
                         </div>
                         <span
-                            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium ${cfg.color}`}
+                            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-bold uppercase ${cfg.color}`}
                         >
                             <span
                                 className={`h-2 w-2 rounded-full ${cfg.dot}`}
@@ -124,69 +131,57 @@ export default function AdminReportsShow({ report }: Props) {
 
                 {/* Flash success */}
                 {flash?.success && (
-                    <div className="mx-4 mt-4 flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700 sm:mx-6">
+                    <div className="mx-4 mt-4 flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-600 sm:mx-6">
                         <CheckCircle className="h-4 w-4 shrink-0" />
                         {flash.success}
                     </div>
                 )}
 
                 <div className="p-4 sm:p-6">
-                    <div className="grid gap-6 lg:grid-cols-3">
+                    <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-3">
                         {/* LEFT: Main Content */}
-                        <div className="space-y-5 lg:col-span-2">
+                        <div className="space-y-6 lg:col-span-2">
                             {/* Photo */}
                             {report.photo && (
-                                <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+                                <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
                                     <img
                                         src={`/storage/${report.photo}`}
                                         alt={report.title}
-                                        className="max-h-80 w-full object-cover"
+                                        className="max-h-[32rem] w-full object-cover"
                                     />
                                 </div>
                             )}
 
                             {/* Description */}
-                            <div className="sipaska-card p-5">
-                                <h2 className="mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase">
+                            <div className="sipaska-card p-6">
+                                <h2 className="mb-4 text-xs font-bold tracking-wide text-muted-foreground uppercase">
                                     Deskripsi Laporan
                                 </h2>
-                                <p className="text-sm leading-relaxed whitespace-pre-wrap text-gray-700">
+                                <p className="text-base leading-relaxed whitespace-pre-wrap text-foreground/90">
                                     {report.description}
                                 </p>
                             </div>
 
-                            {/* Previous admin response (readonly, if any) */}
-                            {report.admin_response && (
-                                <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5">
-                                    <p className="mb-2 text-xs font-semibold tracking-wide text-blue-600 uppercase">
-                                        Respons Sebelumnya
-                                    </p>
-                                    <p className="text-sm text-blue-800">
-                                        {report.admin_response}
-                                    </p>
-                                </div>
-                            )}
-
                             {/* Admin Action Form */}
-                            <div className="rounded-lg border border-slate-200 bg-white shadow-sm">
-                                <div className="border-b border-gray-100 px-5 py-4">
-                                    <h2 className="font-semibold text-gray-900">
+                            <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+                                <div className="border-b border-border bg-muted/30 px-6 py-4">
+                                    <h2 className="font-extrabold text-foreground">
                                         Tindakan Admin
                                     </h2>
-                                    <p className="mt-0.5 text-sm text-gray-500">
+                                    <p className="mt-1 text-xs font-medium text-muted-foreground">
                                         Perbarui status dan kirim respons ke
                                         pelapor.
                                     </p>
                                 </div>
                                 <form
                                     onSubmit={submit}
-                                    className="space-y-4 p-5"
+                                    className="space-y-6 p-6"
                                 >
                                     {/* Status */}
                                     <div>
                                         <label
                                             htmlFor="status"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                            className="mb-3 block text-sm font-bold text-foreground"
                                         >
                                             Status Laporan
                                         </label>
@@ -210,15 +205,15 @@ export default function AdminReportsShow({ report }: Props) {
                                                         onClick={() =>
                                                             setData('status', s)
                                                         }
-                                                        className={`rounded-xl border-2 px-3 py-2.5 text-sm font-medium transition-all ${
+                                                        className={`rounded-xl border-2 px-3 py-3 text-sm font-bold transition-all ${
                                                             isSelected
-                                                                ? `${sc.color} border-current ring-2 ring-current/20`
-                                                            : 'border-slate-200 text-slate-500 hover:border-orange-200 hover:bg-orange-50 hover:text-[#9a4a00]'
+                                                                ? `${sc.color} border-current ring-4 ring-current/10`
+                                                            : 'border-border text-muted-foreground hover:border-primary/50 hover:bg-muted'
                                                         }`}
                                                     >
-                                                        <span className="flex items-center justify-center gap-1.5">
+                                                        <span className="flex items-center justify-center gap-2">
                                                             <span
-                                                                className={`h-1.5 w-1.5 rounded-full ${isSelected ? sc.dot : 'bg-gray-300'}`}
+                                                                className={`h-1.5 w-1.5 rounded-full ${isSelected ? sc.dot : 'bg-muted'}`}
                                                             />
                                                             {sc.label}
                                                         </span>
@@ -227,7 +222,7 @@ export default function AdminReportsShow({ report }: Props) {
                                             })}
                                         </div>
                                         {errors.status && (
-                                            <p className="mt-1.5 text-xs text-red-500">
+                                            <p className="mt-2 text-xs font-bold text-destructive">
                                                 {errors.status}
                                             </p>
                                         )}
@@ -237,10 +232,10 @@ export default function AdminReportsShow({ report }: Props) {
                                     <div>
                                         <label
                                             htmlFor="admin_response"
-                                            className="mb-2 block text-sm font-medium text-gray-700"
+                                            className="mb-3 block text-sm font-bold text-foreground"
                                         >
                                             Catatan / Respons{' '}
-                                            <span className="font-normal text-gray-400">
+                                            <span className="font-normal text-muted-foreground">
                                                 (opsional)
                                             </span>
                                         </label>
@@ -255,31 +250,33 @@ export default function AdminReportsShow({ report }: Props) {
                                             }
                                             placeholder="Berikan catatan atau respons untuk pelapor..."
                                             rows={4}
-                                            className="sipaska-focus w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-[#001e40] transition-all placeholder:text-slate-400 focus:border-[#fd8b00]"
+                                            className="sipaska-focus w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground transition-all placeholder:text-muted-foreground"
                                         />
                                         {errors.admin_response && (
-                                            <p className="mt-1.5 text-xs text-red-500">
+                                            <p className="mt-2 text-xs font-bold text-destructive">
                                                 {errors.admin_response}
                                             </p>
                                         )}
                                     </div>
 
-                                    <div className="flex gap-3 pt-1">
+                                    <div className="flex flex-wrap gap-3 pt-2">
                                         <button
                                             type="submit"
                                             disabled={processing}
-                                            className="inline-flex items-center gap-2 rounded-lg bg-[#fd8b00] px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-orange-600 disabled:opacity-50"
+                                            className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition hover:opacity-90 disabled:opacity-50"
                                         >
                                             {processing
                                                 ? 'Menyimpan...'
                                                 : 'Simpan Perubahan'}
                                         </button>
-                                        <Link
-                                            href={`/${teamSlug}/admin/reports`}
-                                            className="inline-flex items-center rounded-lg border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:border-slate-300 hover:bg-slate-50"
+                                        <button
+                                            type="button"
+                                            onClick={deleteReport}
+                                            className="inline-flex items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/10 px-6 py-3 text-sm font-bold text-destructive transition hover:bg-destructive hover:text-destructive-foreground"
                                         >
-                                            Kembali
-                                        </Link>
+                                            <Trash2 className="size-4" />
+                                            Hapus Permanen
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -288,21 +285,21 @@ export default function AdminReportsShow({ report }: Props) {
                         {/* RIGHT: Sidebar */}
                         <div className="space-y-4">
                             {/* Reporter Info */}
-                            <div className="sipaska-card p-5">
-                                <h3 className="mb-4 text-sm font-semibold tracking-wide text-gray-500 uppercase">
+                            <div className="sipaska-card p-6">
+                                <h3 className="mb-6 text-xs font-bold tracking-wide text-muted-foreground uppercase">
                                     Info Pelapor
                                 </h3>
-                                <div className="flex items-center gap-3">
-                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-sm font-bold text-blue-700">
+                                <div className="flex items-center gap-4">
+                                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-base font-bold text-primary">
                                         {report.user.name
                                             .charAt(0)
                                             .toUpperCase()}
                                     </div>
-                                    <div>
-                                        <p className="text-sm font-semibold text-gray-900">
+                                    <div className="min-w-0">
+                                        <p className="truncate text-sm font-extrabold text-foreground">
                                             {report.user.name}
                                         </p>
-                                        <p className="text-xs text-gray-400">
+                                        <p className="truncate text-xs font-medium text-muted-foreground">
                                             {report.user.email}
                                         </p>
                                     </div>
@@ -310,18 +307,18 @@ export default function AdminReportsShow({ report }: Props) {
                             </div>
 
                             {/* Detail Info */}
-                            <div className="sipaska-card p-5">
-                                <h3 className="mb-4 text-sm font-semibold tracking-wide text-gray-500 uppercase">
+                            <div className="sipaska-card p-6">
+                                <h3 className="mb-6 text-xs font-bold tracking-wide text-muted-foreground uppercase">
                                     Detail Laporan
                                 </h3>
-                                <div className="space-y-3">
+                                <div className="space-y-5">
                                     <div className="flex items-start gap-3">
-                                        <Tag className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                                        <Tag className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                                         <div>
-                                            <p className="text-xs text-gray-400">
+                                            <p className="text-xs font-bold text-muted-foreground">
                                                 Kategori
                                             </p>
-                                            <p className="text-sm font-medium text-gray-900">
+                                            <p className="mt-0.5 text-sm font-semibold text-foreground">
                                                 {categoryLabels[
                                                     report.category
                                                 ] ?? report.category}
@@ -329,23 +326,23 @@ export default function AdminReportsShow({ report }: Props) {
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3">
-                                        <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                                        <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                                         <div>
-                                            <p className="text-xs text-gray-400">
+                                            <p className="text-xs font-bold text-muted-foreground">
                                                 Lokasi
                                             </p>
-                                            <p className="text-sm font-medium text-gray-900">
+                                            <p className="mt-0.5 text-sm font-semibold text-foreground">
                                                 {report.location}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3">
-                                        <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                                        <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                                         <div>
-                                            <p className="text-xs text-gray-400">
+                                            <p className="text-xs font-bold text-muted-foreground">
                                                 Tanggal Lapor
                                             </p>
-                                            <p className="text-sm font-medium text-gray-900">
+                                            <p className="mt-0.5 text-sm font-semibold text-foreground">
                                                 {new Date(
                                                     report.created_at,
                                                 ).toLocaleDateString('id-ID', {
@@ -358,13 +355,13 @@ export default function AdminReportsShow({ report }: Props) {
                                     </div>
                                     {report.priority && (
                                         <div className="flex items-start gap-3">
-                                            <User className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+                                            <User className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                                             <div>
-                                                <p className="text-xs text-gray-400">
+                                                <p className="text-xs font-bold text-muted-foreground">
                                                     Urgensi
                                                 </p>
                                                 <span
-                                                    className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${priorityConfig[report.priority].color}`}
+                                                    className={`mt-1 inline-block rounded-full px-2.5 py-0.5 text-xs font-bold uppercase ${priorityConfig[report.priority].color}`}
                                                 >
                                                     {
                                                         priorityConfig[
@@ -377,12 +374,12 @@ export default function AdminReportsShow({ report }: Props) {
                                     )}
                                     {report.resolved_at && (
                                         <div className="flex items-start gap-3">
-                                            <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
+                                            <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
                                             <div>
-                                                <p className="text-xs text-gray-400">
+                                                <p className="text-xs font-bold text-muted-foreground">
                                                     Diselesaikan
                                                 </p>
-                                                <p className="text-sm font-medium text-green-700">
+                                                <p className="mt-0.5 text-sm font-bold text-emerald-600">
                                                     {new Date(
                                                         report.resolved_at,
                                                     ).toLocaleDateString(
@@ -398,21 +395,6 @@ export default function AdminReportsShow({ report }: Props) {
                                         </div>
                                     )}
                                 </div>
-                            </div>
-
-                            {/* Status Timeline */}
-                            <div className="sipaska-card p-5">
-                                <h3 className="mb-3 text-sm font-semibold tracking-wide text-gray-500 uppercase">
-                                    Status Saat Ini
-                                </h3>
-                                <span
-                                    className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold ${cfg.color}`}
-                                >
-                                    <span
-                                        className={`h-2 w-2 rounded-full ${cfg.dot}`}
-                                    />
-                                    {cfg.label}
-                                </span>
                             </div>
                         </div>
                     </div>

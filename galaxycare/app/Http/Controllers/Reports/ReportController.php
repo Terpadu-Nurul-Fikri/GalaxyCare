@@ -8,6 +8,7 @@ use App\Models\Report;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -56,7 +57,7 @@ class ReportController extends Controller
         $request->user()->reports()->create($data);
 
         return redirect()
-            ->route('reports.index')
+            ->route('reports.index', ['current_team' => $request->user()->currentTeam])
             ->with('success', 'Laporan berhasil dikirim!');
     }
 
@@ -70,5 +71,23 @@ class ReportController extends Controller
         return Inertia::render('reports/show', [
             'report' => $report,
         ]);
+    }
+
+    public function destroy(Request $request, Team $currentTeam, Report $report): RedirectResponse
+    {
+        abort_if($request->user()->isAdmin(), 403);
+        abort_unless($report->user_id === $request->user()->id, 403);
+
+        $photo = $report->photo;
+
+        $report->delete();
+
+        if ($photo) {
+            Storage::disk('public')->delete($photo);
+        }
+
+        return redirect()
+            ->route('reports.index', ['current_team' => $currentTeam])
+            ->with('success', 'Laporan berhasil dihapus.');
     }
 }

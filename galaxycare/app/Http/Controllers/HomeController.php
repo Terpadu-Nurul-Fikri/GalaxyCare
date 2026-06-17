@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CampusInformation;
 use App\Models\Report;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,6 +18,7 @@ class HomeController extends Controller
         return Inertia::render('welcome', [
             'canRegister' => Features::enabled(Features::registration()),
             'stats' => $stats,
+            'campusInformation' => $this->getCampusInformation(),
         ]);
     }
 
@@ -64,6 +66,27 @@ class HomeController extends Controller
             'filters' => [
                 'search' => $search,
             ],
+            'campusInformation' => $this->getCampusInformation(),
+        ]);
+    }
+
+    public function campusInformation(): Response
+    {
+        $campusInformation = CampusInformation::where('is_published', true)
+            ->latest('published_at')
+            ->latest()
+            ->paginate(9)
+            ->through(fn (CampusInformation $information) => [
+                'id' => $information->id,
+                'title' => $information->title,
+                'body' => $information->body,
+                'tone' => $information->tone,
+                'published_at' => $information->published_at,
+                'created_at' => $information->created_at,
+            ]);
+
+        return Inertia::render('campus-information', [
+            'campusInformation' => $campusInformation,
         ]);
     }
 
@@ -82,5 +105,14 @@ class HomeController extends Controller
         } catch (\Exception $e) {
             return ['total' => 0, 'pending' => 0, 'diproses' => 0, 'selesai' => 0];
         }
+    }
+
+    private function getCampusInformation()
+    {
+        return CampusInformation::where('is_published', true)
+            ->latest('published_at')
+            ->latest()
+            ->take(3)
+            ->get(['id', 'title', 'body', 'tone', 'published_at', 'created_at']);
     }
 }

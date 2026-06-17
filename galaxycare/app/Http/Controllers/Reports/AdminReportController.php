@@ -9,6 +9,7 @@ use App\Models\Report;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -86,5 +87,20 @@ class AdminReportController extends Controller
         ]);
 
         return back()->with('success', 'Status laporan berhasil diperbarui.');
+    }
+
+    public function destroy(Team $currentTeam, Report $report): RedirectResponse
+    {
+        $photo = $report->photo;
+
+        $report->delete();
+
+        if ($photo) {
+            Storage::disk('public')->delete($photo);
+        }
+
+        return redirect()
+            ->route('admin.reports.index', ['current_team' => $currentTeam])
+            ->with('success', 'Laporan berhasil dihapus oleh admin.');
     }
 }

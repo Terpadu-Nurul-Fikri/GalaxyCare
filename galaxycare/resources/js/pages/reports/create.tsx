@@ -24,19 +24,19 @@ const priorities = [
         value: 'low',
         label: 'Rendah',
         activeClass:
-            'border-green-300 bg-green-50 text-green-700 ring-2 ring-green-200',
+            'border-green-300 bg-green-50 text-green-700 ring-2 ring-green-200 dark:border-green-800 dark:bg-green-950/40 dark:text-green-200 dark:ring-green-900/50',
     },
     {
         value: 'medium',
         label: 'Sedang',
         activeClass:
-            'border-yellow-300 bg-yellow-50 text-yellow-700 ring-2 ring-yellow-200',
+            'border-yellow-300 bg-yellow-50 text-yellow-700 ring-2 ring-yellow-200 dark:border-yellow-800 dark:bg-yellow-950/40 dark:text-yellow-200 dark:ring-yellow-900/50',
     },
     {
         value: 'high',
         label: 'Tinggi',
         activeClass:
-            'border-red-300 bg-red-50 text-red-700 ring-2 ring-red-200',
+            'border-red-300 bg-red-50 text-red-700 ring-2 ring-red-200 dark:border-red-800 dark:bg-red-950/40 dark:text-red-200 dark:ring-red-900/50',
     },
 ];
 
@@ -88,26 +88,26 @@ export default function ReportsCreate() {
     }
 
     const inputClass =
-        'sipaska-focus w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-[#001e40] placeholder:text-slate-400 transition-all focus:border-[#fd8b00]';
+        'sipaska-focus w-full rounded-lg border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition-all focus:border-[#fd8b00]';
 
     return (
         <>
             <Head title="Buat Laporan" />
-            <div className="min-h-screen bg-[#f7f9fb]">
+            <div className="min-h-screen bg-background text-foreground">
                 {/* Top bar */}
-                <div className="border-b border-gray-100 bg-white px-4 py-4 sm:px-6">
+                <div className="border-b border-border bg-card px-4 py-4 sm:px-6">
                     <div className="flex items-center gap-3">
                         <Link
                             href={`/${teamSlug}/reports`}
-                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition-colors hover:border-orange-200 hover:bg-orange-50 hover:text-[#9a4a00]"
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-orange-200 hover:bg-orange-50 hover:text-[#9a4a00] dark:hover:border-orange-900 dark:hover:bg-orange-950/40 dark:hover:text-orange-200"
                         >
                             <ArrowLeft className="h-4 w-4" />
                         </Link>
                         <div>
-                            <h1 className="text-lg font-bold text-gray-900">
+                            <h1 className="text-lg font-bold text-foreground">
                                 Buat Laporan Baru
                             </h1>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-muted-foreground">
                                 Laporkan kerusakan fasilitas kampus yang Anda
                                 temukan.
                             </p>
@@ -117,12 +117,12 @@ export default function ReportsCreate() {
 
                 <div className="p-4 sm:p-6">
                     <div className="mx-auto max-w-2xl">
-                        <div className="animate-sipaska-slide-up rounded-lg border border-slate-200 bg-white shadow-sm">
-                            <div className="border-b border-gray-100 px-5 py-4">
-                                <h2 className="font-semibold text-gray-900">
+                        <div className="animate-sipaska-slide-up rounded-lg border border-border bg-card shadow-sm">
+                            <div className="border-b border-border px-5 py-4">
+                                <h2 className="font-semibold text-foreground">
                                     Detail Laporan
                                 </h2>
-                                <p className="mt-0.5 text-sm text-gray-500">
+                                <p className="mt-0.5 text-sm text-muted-foreground">
                                     Isi informasi selengkap mungkin agar proses
                                     penanganan lebih cepat.
                                 </p>
@@ -133,7 +133,7 @@ export default function ReportsCreate() {
                                 <div>
                                     <label
                                         htmlFor="title"
-                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                        className="mb-2 block text-sm font-medium text-foreground"
                                     >
                                         Judul Laporan{' '}
                                         <span className="text-red-500">*</span>
@@ -159,7 +159,7 @@ export default function ReportsCreate() {
                                 <div>
                                     <label
                                         htmlFor="category"
-                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                        className="mb-2 block text-sm font-medium text-foreground"
                                     >
                                         Kategori{' '}
                                         <span className="text-red-500">*</span>
@@ -195,7 +195,7 @@ export default function ReportsCreate() {
                                 <div>
                                     <label
                                         htmlFor="location"
-                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                        className="mb-2 block text-sm font-medium text-foreground"
                                     >
                                         Lokasi{' '}
                                         <span className="text-red-500">*</span>
@@ -221,7 +221,7 @@ export default function ReportsCreate() {
                                 <div>
                                     <label
                                         htmlFor="description"
-                                        className="mb-2 block text-sm font-medium text-gray-700"
+                                        className="mb-2 block text-sm font-medium text-foreground"
                                     >
                                         Deskripsi{' '}
                                         <span className="text-red-500">*</span>
@@ -248,7 +248,7 @@ export default function ReportsCreate() {
 
                                 {/* Priority */}
                                 <div>
-                                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                                    <label className="mb-2 block text-sm font-medium text-foreground">
                                         Tingkat Urgensi
                                     </label>
                                     <div className="grid grid-cols-3 gap-2">
@@ -262,7 +262,7 @@ export default function ReportsCreate() {
                                                 className={`rounded-xl border-2 py-2.5 text-sm font-medium transition-all ${
                                                     data.priority === p.value
                                                         ? p.activeClass
-                                                        : 'border-slate-200 text-slate-500 hover:border-orange-200 hover:bg-orange-50'
+                                                        : 'border-border text-muted-foreground hover:border-orange-200 hover:bg-orange-50 hover:text-[#9a4a00] dark:hover:border-orange-900 dark:hover:bg-orange-950/40 dark:hover:text-orange-200'
                                                 }`}
                                             >
                                                 {p.label}
@@ -273,14 +273,14 @@ export default function ReportsCreate() {
 
                                 {/* Photo Upload */}
                                 <div>
-                                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                                    <label className="mb-2 block text-sm font-medium text-foreground">
                                         Foto{' '}
-                                        <span className="font-normal text-gray-400">
+                                        <span className="font-normal text-muted-foreground">
                                             (opsional)
                                         </span>
                                     </label>
                                     {preview ? (
-                                        <div className="relative overflow-hidden rounded-xl border border-gray-200">
+                                        <div className="relative overflow-hidden rounded-lg border border-border">
                                             <img
                                                 src={preview}
                                                 alt="Preview"
@@ -301,15 +301,15 @@ export default function ReportsCreate() {
                                             onClick={() =>
                                                 fileInputRef.current?.click()
                                             }
-                                            className="flex w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 bg-slate-50 p-8 text-center transition-colors hover:border-orange-300 hover:bg-orange-50"
+                                            className="flex w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-background p-8 text-center transition-colors hover:border-orange-300 hover:bg-orange-50 dark:hover:border-orange-900 dark:hover:bg-orange-950/40"
                                         >
-                                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-sm">
+                                            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-card shadow-sm">
                                                 <Upload className="h-5 w-5 text-[#fd8b00]" />
                                             </div>
-                                            <p className="mt-3 text-sm font-medium text-gray-700">
+                                            <p className="mt-3 text-sm font-medium text-foreground">
                                                 Klik untuk upload foto
                                             </p>
-                                            <p className="mt-1 text-xs text-gray-400">
+                                            <p className="mt-1 text-xs text-muted-foreground">
                                                 JPG, PNG, WebP - maks. 2MB
                                             </p>
                                         </button>
@@ -341,7 +341,7 @@ export default function ReportsCreate() {
                                     </button>
                                     <Link
                                         href={`/${teamSlug}/reports`}
-                                        className="inline-flex items-center rounded-lg border border-slate-200 px-5 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:border-slate-300 hover:bg-slate-50"
+                                        className="inline-flex items-center rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-foreground dark:hover:bg-slate-800"
                                     >
                                         Batal
                                     </Link>

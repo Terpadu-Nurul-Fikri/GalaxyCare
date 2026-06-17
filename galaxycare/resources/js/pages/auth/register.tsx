@@ -26,7 +26,7 @@ export default function Register() {
                             <div className="grid gap-2.5">
                                 <Label
                                     htmlFor="name"
-                                    className="font-semibold text-[#43474f]"
+                                    className="font-semibold text-[#43474f] dark:text-slate-200"
                                 >
                                     Nama Lengkap
                                 </Label>
@@ -39,14 +39,14 @@ export default function Register() {
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Nama lengkap"
-                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20"
+                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
                                 />
                                 <InputError message={errors.name} />
                             </div>
                             <div className="grid gap-2.5">
                                 <Label
                                     htmlFor="email"
-                                    className="font-semibold text-[#43474f]"
+                                    className="font-semibold text-[#43474f] dark:text-slate-200"
                                 >
                                     Email Kampus
                                 </Label>
@@ -58,9 +58,9 @@ export default function Register() {
                                     autoComplete="email"
                                     name="email"
                                     placeholder="nim@student.nurulfikri.ac.id"
-                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20"
+                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
                                 />
-                                <p className="text-xs leading-5 font-medium text-[#737780]">
+                                <p className="text-xs leading-5 font-medium text-[#737780] dark:text-slate-400">
                                     Hanya email{' '}
                                     <strong>@student.nurulfikri.ac.id</strong>
                                 </p>
@@ -69,7 +69,7 @@ export default function Register() {
                             <div className="grid gap-2.5">
                                 <Label
                                     htmlFor="password"
-                                    className="font-semibold text-[#43474f]"
+                                    className="font-semibold text-[#43474f] dark:text-slate-200"
                                 >
                                     Password
                                 </Label>
@@ -80,14 +80,14 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="Minimal 8 karakter"
-                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20"
+                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
                                 />
                                 <InputError message={errors.password} />
                             </div>
                             <div className="grid gap-2.5">
                                 <Label
                                     htmlFor="password_confirmation"
-                                    className="font-semibold text-[#43474f]"
+                                    className="font-semibold text-[#43474f] dark:text-slate-200"
                                 >
                                     Konfirmasi Password
                                 </Label>
@@ -98,7 +98,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password_confirmation"
                                     placeholder="Ulangi password"
-                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20"
+                                    className="h-12 rounded-lg border-[#c3c6d1] bg-[#f3f4f5] text-[#001e40] placeholder:text-[#737780] focus-visible:border-[#003366] focus-visible:ring-[#003366]/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:placeholder:text-slate-500"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -114,11 +114,11 @@ export default function Register() {
                                 <UserPlus className="h-4 w-4" />
                             </Button>
                         </div>
-                        <p className="text-center text-sm text-[#43474f]">
+                        <p className="text-center text-sm text-[#43474f] dark:text-slate-300">
                             Sudah punya akun?{' '}
                             <TextLink
                                 href={login()}
-                                className="font-bold text-[#001e40] decoration-transparent hover:text-[#904d00]"
+                                className="font-bold text-[#001e40] decoration-transparent hover:text-[#904d00] dark:text-white dark:hover:text-orange-300"
                                 tabIndex={6}
                             >
                                 Masuk

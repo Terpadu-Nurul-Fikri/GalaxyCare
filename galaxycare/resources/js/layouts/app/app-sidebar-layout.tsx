@@ -2,6 +2,7 @@ import { AppContent } from '@/components/app-content';
 import { AppShell } from '@/components/app-shell';
 import { AppSidebar } from '@/components/app-sidebar';
 import { AppSidebarHeader } from '@/components/app-sidebar-header';
+import { DashboardTutorial } from '@/components/dashboard-tutorial';
 import type { AppLayoutProps } from '@/types';
 
 export default function AppSidebarLayout({
@@ -13,11 +14,12 @@ export default function AppSidebarLayout({
             <AppSidebar />
             <AppContent
                 variant="sidebar"
-                className="overflow-x-hidden bg-[#f7f9fb]"
+                className="overflow-x-hidden bg-background"
             >
                 <AppSidebarHeader breadcrumbs={breadcrumbs} />
                 {children}
             </AppContent>
+            <DashboardTutorial />
         </AppShell>
     );
 }

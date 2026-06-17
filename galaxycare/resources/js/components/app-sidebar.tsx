@@ -3,13 +3,14 @@ import {
     Bell,
     CircleHelp,
     ClipboardList,
-    LogOut,
     LayoutGrid,
+    Megaphone,
+    MessageCircle,
     PlusCircle,
-    User,
     Shield,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
+import { openDashboardTutorial } from '@/components/dashboard-tutorial';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { TeamSwitcher } from '@/components/team-switcher';
@@ -35,12 +36,18 @@ export function AppSidebar() {
 
     const mainNavItems: NavItem[] = [
         { title: 'Dashboard', href: dashboardUrl, icon: LayoutGrid },
+        { title: 'Forum', href: '/forum', icon: MessageCircle },
         ...(isAdmin
             ? [
                   {
                       title: 'Kelola Laporan',
                       href: `/${teamSlug}/admin/reports`,
                       icon: Shield,
+                  },
+                  {
+                      title: 'Informasi Kampus',
+                      href: `/${teamSlug}/admin/campus-information`,
+                      icon: Megaphone,
                   },
               ]
             : [
@@ -58,11 +65,6 @@ export function AppSidebar() {
                       title: 'Notifikasi',
                       href: `/${teamSlug}/notifications`,
                       icon: Bell,
-                  },
-                  {
-                      title: 'Profil',
-                      href: '/settings/profile',
-                      icon: User,
                   },
               ]),
     ];
@@ -98,22 +100,14 @@ export function AppSidebar() {
             </SidebarContent>
             <SidebarFooter className="gap-5 border-t border-white/10 px-7 py-6">
                 <div className="flex flex-col gap-3 group-data-[collapsible=icon]:hidden">
-                    <Link
-                        href="/"
-                        className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+                    <button
+                        type="button"
+                        onClick={openDashboardTutorial}
+                        className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                     >
                         <CircleHelp className="size-5" />
-                        Bantuan
-                    </Link>
-                    <Link
-                        href="/logout"
-                        method="post"
-                        as="button"
-                        className="flex items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold text-orange-200 transition-colors hover:bg-white/10 hover:text-white"
-                    >
-                        <LogOut className="size-5" />
-                        Keluar
-                    </Link>
+                        Tutorial Dashboard
+                    </button>
                 </div>
                 <NavUser />
             </SidebarFooter>

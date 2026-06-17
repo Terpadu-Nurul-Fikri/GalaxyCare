@@ -8,6 +8,8 @@ import {
     TrendingUp,
 } from 'lucide-react';
 import { AnimateIn } from '@/components/animate-in';
+import { CampusInformationPanel } from '@/components/campus-information-panel';
+import type { CampusInformationItem } from '@/components/campus-information-panel';
 import { PublicLayout } from '@/components/public-layout';
 import { dashboard, register } from '@/routes';
 
@@ -19,9 +21,10 @@ type Props = {
         diproses: number;
         selesai: number;
     };
+    campusInformation: CampusInformationItem[];
 };
 
-export default function Welcome({ stats }: Props) {
+export default function Welcome({ stats, campusInformation }: Props) {
     const { auth, currentTeam } = usePage().props;
     const dashboardUrl = currentTeam ? dashboard(currentTeam.slug) : '/';
 
@@ -53,7 +56,7 @@ export default function Welcome({ stats }: Props) {
                             <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-blue-100">
                                 Sistem Pengaduan Fasilitas Kampus untuk
                                 melaporkan kerusakan, memantau progres, dan
-                                menjaga fasilitas akademik tetap responsif.
+                                membantu BSP menindaklanjuti fasilitas kampus.
                             </p>
                         </AnimateIn>
                         <AnimateIn delay={300}>
@@ -92,11 +95,13 @@ export default function Welcome({ stats }: Props) {
                     </div>
                 </section>
 
+                <CampusInformationPanel items={campusInformation} />
+
                 {/* Stats */}
-                <section className="border-t border-slate-200 px-4 py-14">
+                <section className="border-t border-slate-200 px-4 py-14 dark:border-slate-800 dark:bg-slate-950">
                     <div className="mx-auto max-w-4xl">
                         <AnimateIn>
-                            <p className="text-center text-sm font-bold text-slate-500 uppercase">
+                            <p className="text-center text-sm font-bold text-slate-500 uppercase dark:text-slate-400">
                                 Statistik Pengaduan
                             </p>
                         </AnimateIn>
@@ -106,38 +111,38 @@ export default function Welcome({ stats }: Props) {
                                     icon: FileText,
                                     value: stats.total,
                                     label: 'Total Laporan',
-                                    color: 'text-[#003366] bg-blue-100',
+                                    color: 'text-[#003366] bg-blue-100 dark:bg-blue-950/50 dark:text-blue-200',
                                 },
                                 {
                                     icon: Clock,
                                     value: stats.pending,
                                     label: 'Menunggu',
-                                    color: 'text-[#fd8b00] bg-orange-100',
+                                    color: 'text-[#fd8b00] bg-orange-100 dark:bg-orange-950/50 dark:text-orange-200',
                                 },
                                 {
                                     icon: TrendingUp,
                                     value: stats.diproses,
                                     label: 'Diproses',
-                                    color: 'text-blue-600 bg-blue-100',
+                                    color: 'text-blue-600 bg-blue-100 dark:bg-sky-950/50 dark:text-sky-200',
                                 },
                                 {
                                     icon: CheckCircle,
                                     value: stats.selesai,
                                     label: 'Selesai',
-                                    color: 'text-green-600 bg-green-50',
+                                    color: 'text-green-600 bg-green-50 dark:bg-emerald-950/50 dark:text-emerald-200',
                                 },
                             ].map((item, i) => (
                                 <AnimateIn key={item.label} delay={i * 100}>
-                                    <div className="group rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm transition-all hover:border-[#003366]/30 hover:shadow-md">
+                                    <div className="group rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm transition-all hover:border-[#003366]/30 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-900">
                                         <div
                                             className={`mx-auto flex h-10 w-10 items-center justify-center rounded-xl ${item.color} transition-transform group-hover:scale-110`}
                                         >
                                             <item.icon className="h-5 w-5" />
                                         </div>
-                                        <p className="mt-3 text-2xl font-extrabold text-[#001e40]">
+                                        <p className="mt-3 text-2xl font-extrabold text-[#001e40] dark:text-white">
                                             {item.value}
                                         </p>
-                                        <p className="text-xs text-slate-500">
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">
                                             {item.label}
                                         </p>
                                     </div>
@@ -148,10 +153,10 @@ export default function Welcome({ stats }: Props) {
                 </section>
 
                 {/* Features */}
-                <section className="bg-[#f7f9fb] px-4 py-16">
+                <section className="bg-[#f7f9fb] px-4 py-16 dark:bg-slate-950">
                     <div className="mx-auto max-w-4xl">
                         <AnimateIn>
-                            <h2 className="text-center text-2xl font-extrabold text-[#001e40] sm:text-3xl">
+                            <h2 className="text-center text-2xl font-extrabold text-[#001e40] sm:text-3xl dark:text-white">
                                 Bagaimana Cara Kerjanya?
                             </h2>
                         </AnimateIn>
@@ -171,22 +176,22 @@ export default function Welcome({ stats }: Props) {
                                 },
                                 {
                                     icon: MessageCircle,
-                                    title: 'Forum Anonim',
-                                    desc: 'Sampaikan kritik & saran tanpa perlu login.',
+                                    title: 'Forum Aspirasi',
+                                    desc: 'Lihat kritik, saran, dan aspirasi fasilitas kampus.',
                                     color: 'bg-[#fd8b00]',
                                 },
                             ].map((item, i) => (
                                 <AnimateIn key={item.title} delay={i * 150}>
-                                    <div className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+                                    <div className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700">
                                         <div
                                             className={`flex h-11 w-11 items-center justify-center rounded-xl ${item.color} text-white shadow-sm transition-transform group-hover:scale-110`}
                                         >
                                             <item.icon className="h-5 w-5" />
                                         </div>
-                                        <h3 className="mt-4 font-bold text-[#001e40]">
+                                        <h3 className="mt-4 font-bold text-[#001e40] dark:text-white">
                                             {item.title}
                                         </h3>
-                                        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                                        <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                                             {item.desc}
                                         </p>
                                     </div>
@@ -197,7 +202,7 @@ export default function Welcome({ stats }: Props) {
                 </section>
 
                 {/* CTA */}
-                <section className="px-4 py-16">
+                <section className="px-4 py-16 dark:bg-slate-950">
                     <AnimateIn>
                         <div className="mx-auto max-w-2xl rounded-2xl bg-[#001e40] p-8 text-center shadow-xl sm:p-12">
                             <h2 className="text-2xl font-bold text-white sm:text-3xl">

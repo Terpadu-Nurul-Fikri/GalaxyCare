@@ -14,6 +14,8 @@ import {
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { AnimateIn } from '@/components/animate-in';
+import { CampusInformationPanel } from '@/components/campus-information-panel';
+import type { CampusInformationItem } from '@/components/campus-information-panel';
 import { PublicLayout } from '@/components/public-layout';
 
 type Report = {
@@ -42,6 +44,7 @@ type Props = {
     filters?: {
         search?: string;
     };
+    campusInformation: CampusInformationItem[];
 };
 
 const statusMap = {
@@ -84,7 +87,12 @@ const categoryLabels: Record<string, string> = {
     kelas: 'Kelas',
 };
 
-export default function Progress({ stats, reports, filters }: Props) {
+export default function Progress({
+    stats,
+    reports,
+    filters,
+    campusInformation,
+}: Props) {
     const reportItems = reports?.data ?? [];
     const [search, setSearch] = useState(filters?.search ?? '');
     const hasActiveSearch = (filters?.search ?? '') !== '';
@@ -120,19 +128,19 @@ export default function Progress({ stats, reports, filters }: Props) {
         <>
             <Head title="Progress Pengaduan - SIPASKA" />
             <PublicLayout>
-                <div className="bg-white">
+                <div className="border-b border-border bg-card">
                     <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:py-14">
                         <AnimateIn>
                             <div className="flex max-w-3xl flex-col gap-5">
-                                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-bold text-teal-700 uppercase">
+                                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-bold text-primary uppercase">
                                     <SearchCheck className="size-4" />
                                     Transparansi Publik
                                 </span>
                                 <div className="flex flex-col gap-3">
-                                    <h1 className="text-3xl font-extrabold text-slate-950 sm:text-5xl">
+                                    <h1 className="text-3xl font-extrabold text-foreground sm:text-5xl">
                                         Progress Pengaduan Fasilitas Kampus
                                     </h1>
-                                    <p className="max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                                    <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
                                         Pantau status laporan tanpa login. Untuk
                                         membuat laporan baru, mahasiswa tetap
                                         perlu masuk agar laporan tercatat atas
@@ -143,15 +151,15 @@ export default function Progress({ stats, reports, filters }: Props) {
                                     <Link
                                         href="/login"
                                         prefetch
-                                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
+                                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition hover:opacity-90"
                                     >
                                         <PlusCircle className="size-4" />
-                                        Buat Laporan
+                                        Masuk untuk Lapor
                                     </Link>
                                     <Link
                                         href="/forum"
                                         prefetch
-                                        className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:border-teal-200 hover:bg-teal-50"
+                                        className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-bold text-foreground transition hover:bg-muted"
                                     >
                                         Forum Publik
                                         <ArrowRight className="size-4" />
@@ -161,26 +169,26 @@ export default function Progress({ stats, reports, filters }: Props) {
                         </AnimateIn>
 
                         <AnimateIn delay={120}>
-                            <div className="rounded-lg border border-slate-200 bg-slate-50 p-6">
-                                <p className="text-sm font-bold text-slate-500 uppercase">
+                            <div className="rounded-xl border border-border bg-muted/30 p-6">
+                                <p className="text-sm font-bold text-muted-foreground uppercase">
                                     Ringkasan
                                 </p>
-                                <p className="mt-3 text-5xl font-extrabold text-slate-950">
+                                <p className="mt-3 text-5xl font-extrabold text-foreground">
                                     {stats.total}
                                 </p>
-                                <p className="mt-2 text-sm leading-6 text-slate-600">
+                                <p className="mt-2 text-sm leading-6 text-muted-foreground/80">
                                     total laporan fasilitas yang sudah masuk ke
-                                    sistem SIPASKA.
+                                    sistem SIPASKA untuk ditindaklanjuti BSP.
                                 </p>
-                                <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-200">
+                                <div className="mt-6 h-2 overflow-hidden rounded-full bg-muted">
                                     <div
-                                        className="h-full rounded-full bg-teal-500"
+                                        className="h-full rounded-full bg-primary"
                                         style={{
                                             width: `${stats.total > 0 ? Math.round((stats.selesai / stats.total) * 100) : 0}%`,
                                         }}
                                     />
                                 </div>
-                                <p className="mt-3 text-xs font-semibold text-slate-500">
+                                <p className="mt-3 text-xs font-semibold text-muted-foreground">
                                     {stats.total > 0
                                         ? `${Math.round((stats.selesai / stats.total) * 100)}% laporan selesai`
                                         : 'Belum ada laporan selesai'}
@@ -190,6 +198,8 @@ export default function Progress({ stats, reports, filters }: Props) {
                     </div>
                 </div>
 
+                <CampusInformationPanel items={campusInformation} compact />
+
                 <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                         {[
@@ -197,39 +207,39 @@ export default function Progress({ stats, reports, filters }: Props) {
                                 icon: FileText,
                                 value: stats.total,
                                 label: 'Total',
-                                color: 'text-blue-600 bg-blue-50',
+                                color: 'text-primary bg-primary/10',
                             },
                             {
                                 icon: Clock,
                                 value: stats.pending,
                                 label: 'Menunggu',
-                                color: 'text-amber-600 bg-amber-50',
+                                color: 'text-amber-600 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-400',
                             },
                             {
                                 icon: TrendingUp,
                                 value: stats.diproses,
                                 label: 'Diproses',
-                                color: 'text-indigo-600 bg-indigo-50',
+                                color: 'text-blue-600 bg-blue-50 dark:bg-blue-900/20 dark:text-blue-400',
                             },
                             {
                                 icon: CheckCircle,
                                 value: stats.selesai,
                                 label: 'Selesai',
-                                color: 'text-green-600 bg-green-50',
+                                color: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 dark:text-emerald-400',
                             },
                         ].map((item, index) => (
                             <AnimateIn key={item.label} delay={index * 80}>
-                                <div className="flex min-h-28 items-center gap-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+                                <div className="flex min-h-28 items-center gap-3 rounded-xl border border-border bg-card p-4 shadow-sm">
                                     <div
                                         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${item.color}`}
                                     >
                                         <item.icon className="h-4 w-4" />
                                     </div>
                                     <div>
-                                        <p className="text-xl font-bold text-gray-900">
+                                        <p className="text-xl font-bold text-foreground">
                                             {item.value}
                                         </p>
-                                        <p className="text-xs text-gray-500">
+                                        <p className="text-xs text-muted-foreground">
                                             {item.label}
                                         </p>
                                     </div>
@@ -240,10 +250,10 @@ export default function Progress({ stats, reports, filters }: Props) {
 
                     <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <h2 className="text-2xl font-extrabold text-slate-950">
+                            <h2 className="text-2xl font-extrabold text-foreground">
                                 Semua Progress Pengaduan
                             </h2>
-                            <p className="mt-1 text-sm text-slate-500">
+                            <p className="mt-1 text-sm text-muted-foreground">
                                 Data publik hanya menampilkan informasi umum
                                 tanpa identitas pelapor.
                             </p>
@@ -252,8 +262,8 @@ export default function Progress({ stats, reports, filters }: Props) {
                             onSubmit={submitSearch}
                             className="flex w-full flex-col gap-2 sm:max-w-md sm:flex-row"
                         >
-                            <label className="relative flex min-h-11 flex-1 items-center rounded-lg border border-slate-200 bg-white px-3 focus-within:border-teal-300 focus-within:ring-2 focus-within:ring-teal-100">
-                                <Search className="size-4 shrink-0 text-slate-400" />
+                            <label className="relative flex min-h-11 flex-1 items-center rounded-xl border border-border bg-card px-3 focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/10">
+                                <Search className="size-4 shrink-0 text-muted-foreground" />
                                 <span className="sr-only">
                                     Cari progress pengaduan
                                 </span>
@@ -263,13 +273,13 @@ export default function Progress({ stats, reports, filters }: Props) {
                                     onChange={(e) => setSearch(e.target.value)}
                                     maxLength={80}
                                     placeholder="Cari judul, lokasi, status..."
-                                    className="h-full min-w-0 flex-1 border-0 bg-transparent px-3 text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                                    className="h-full min-w-0 flex-1 border-0 bg-transparent px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                                 />
                                 {hasActiveSearch && (
                                     <button
                                         type="button"
                                         onClick={clearSearch}
-                                        className="flex size-7 shrink-0 items-center justify-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                                        className="flex size-7 shrink-0 items-center justify-center rounded-md text-muted-foreground transition hover:bg-muted hover:text-foreground"
                                         aria-label="Bersihkan pencarian"
                                     >
                                         <X className="size-4" />
@@ -278,7 +288,7 @@ export default function Progress({ stats, reports, filters }: Props) {
                             </label>
                             <button
                                 type="submit"
-                                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-slate-950 px-5 text-sm font-bold text-white transition hover:bg-slate-800"
+                                className="inline-flex min-h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-primary-foreground transition hover:opacity-90"
                             >
                                 Cari
                             </button>
@@ -294,9 +304,9 @@ export default function Progress({ stats, reports, filters }: Props) {
                     <div className="mt-6 grid gap-3">
                         {reportItems.length === 0 ? (
                             <AnimateIn>
-                                <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center">
+                                <div className="rounded-lg border border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-900">
                                     <FileText className="mx-auto h-10 w-10 text-gray-200" />
-                                    <p className="mt-3 text-gray-400">
+                                    <p className="mt-3 text-gray-400 dark:text-slate-500">
                                         {hasActiveSearch
                                             ? 'Tidak ada progress yang cocok dengan pencarian.'
                                             : 'Belum ada laporan pengaduan.'}
@@ -321,23 +331,23 @@ export default function Progress({ stats, reports, filters }: Props) {
                                         key={report.id}
                                         delay={index * 50}
                                     >
-                                        <div className="group grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-teal-200 hover:shadow-md md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+                                        <div className="group grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-teal-200 hover:shadow-md md:grid-cols-[minmax(0,1fr)_auto] md:items-center dark:border-slate-800 dark:bg-slate-900 dark:hover:border-teal-800">
                                             <div className="min-w-0 flex-1">
                                                 <div className="flex flex-wrap items-center gap-2">
-                                                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 uppercase">
+                                                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600 uppercase dark:bg-slate-800 dark:text-slate-300">
                                                         {categoryLabels[
                                                             report.category
                                                         ] ?? report.category}
                                                     </span>
-                                                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500">
+                                                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
                                                         <MapPin className="size-3.5" />
                                                         {report.location}
                                                     </span>
                                                 </div>
-                                                <p className="mt-3 truncate font-bold text-slate-950 transition-colors group-hover:text-teal-700">
+                                                <p className="mt-3 truncate font-bold text-slate-950 transition-colors group-hover:text-teal-700 dark:text-white dark:group-hover:text-teal-300">
                                                     {report.title}
                                                 </p>
-                                                <p className="mt-1 text-sm text-slate-500">
+                                                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                                                     {new Date(
                                                         report.created_at,
                                                     ).toLocaleDateString(
