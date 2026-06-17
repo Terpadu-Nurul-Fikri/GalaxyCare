@@ -1,88 +1,128 @@
-# SIPASKA - Sistem Pengaduan Fasilitas Kampus
+# SIPASKA
 
-Sistem pengaduan fasilitas kampus STT Terpadu Nurul Fikri. Clean, cepat, responsif.
+SIPASKA adalah aplikasi pengaduan fasilitas kampus untuk mahasiswa dan admin Biro Sarana dan Prasarana. Aplikasi ini mendukung laporan fasilitas dengan foto, tracking status, forum aspirasi publik, informasi kampus, notifikasi, dashboard admin, dan dashboard user.
 
-## Tech Stack
+## Stack
 
-Laravel 13 • React 19 • Inertia.js v3 • Tailwind CSS v4 • MySQL
+- Laravel 13
+- Inertia.js 3
+- React 19
+- Tailwind CSS 4
+- Fortify
+- PHPUnit
+- Vite
 
-## Fitur
+Project ini tidak memakai Bootstrap. Styling utama memakai Tailwind CSS dan komponen React.
 
-- **Landing Page** — Statistik pengaduan publik
-- **Progress Publik** — Semua orang bisa lihat status pengaduan tanpa login
-- **Forum Anonim** — Kirim kritik/saran/aspirasi tanpa login
-- **Login/Register** — Khusus email @student.nurulfikri.ac.id
-- **Buat Laporan** — Upload foto, kategori, lokasi, prioritas
-- **Dashboard** — Statistik + laporan terbaru
-- **Admin Panel** — Kelola laporan, ubah status, beri respons
-- **Notifikasi** — Update otomatis saat status berubah
+## Fitur Utama
 
-## Halaman
+- Laporan fasilitas kampus dengan kategori, prioritas, lokasi, deskripsi, dan foto.
+- Dashboard user untuk membuat dan memantau laporan sendiri.
+- Dashboard admin untuk mengelola status laporan dan respons admin.
+- Forum aspirasi publik dengan pilihan identitas anonim atau nama akun.
+- Informasi Kampus yang dapat dipublish admin dan tampil di halaman publik.
+- Halaman Progress publik tanpa membuka identitas pelapor.
+- Dark mode, light mode, system mode, dan kontrol animasi interface.
 
-| URL | Akses | Fungsi |
-|-----|-------|--------|
-| `/` | Publik | Landing page + statistik |
-| `/progress` | Publik | Daftar pengaduan + status |
-| `/forum` | Publik | Forum kritik/saran anonim |
-| `/login` | Publik | Login (admin & mahasiswa) |
-| `/register` | Publik | Daftar akun baru |
-| `/dashboard` | Login | Dashboard personal |
-| `/reports` | Login | Laporan saya |
-| `/reports/create` | Login | Buat laporan baru |
-| `/admin/reports` | Admin | Kelola semua laporan |
+## Struktur Asset
 
-## Instalasi
+- `public/logo.png` dipakai langsung oleh browser untuk favicon dan logo runtime.
+- `resources/images/logo.png` adalah source/master logo agar asset project tetap rapi.
+- Screenshot README sebaiknya ditaruh di `docs/screenshots/`.
+
+Rekomendasi screenshot untuk README:
+
+- `docs/screenshots/dashboard-user-dark.png`
+- `docs/screenshots/dashboard-admin-dark.png`
+- `docs/screenshots/forum-anonymous.png`
+- `docs/screenshots/campus-information.png`
+- `docs/screenshots/report-create.png`
+
+Setelah screenshot dibuat, tambahkan preview seperti ini:
+
+```md
+![Dashboard User Dark](docs/screenshots/dashboard-user-dark.png)
+```
+
+## Setup Lokal
 
 ```bash
-git clone <repo-url>
-cd sipaska
 composer install
 npm install
 cp .env.example .env
 php artisan key:generate
-```
-
-Edit `.env`:
-
-```env
-APP_NAME=SIPASKA
-DB_DATABASE=sipaska
-DB_USERNAME=root
-DB_PASSWORD=
-SESSION_DRIVER=file
-CACHE_STORE=file
-QUEUE_CONNECTION=sync
-```
-
-Jalankan:
-
-```bash
 php artisan migrate
-php artisan db:seed
 php artisan storage:link
 npm run build
-php artisan serve
 ```
 
-Buka: http://localhost:8000
-
-## Akun Demo
-
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@student.nurulfikri.ac.id | password |
-| Mahasiswa | ahmad.fauzi@student.nurulfikri.ac.id | password |
-
-## Admin Login
-
-Admin login di `/login` yang sama. Sistem membedakan berdasarkan role. Setelah login, admin melihat menu "Kelola Laporan" di sidebar.
-
-## Reset Data
+Jalankan server lokal:
 
 ```bash
-php artisan migrate:fresh --seed
+php artisan serve
+npm run dev
 ```
 
-## Lisensi
+## Verifikasi Sebelum Push
 
-MIT
+```bash
+vendor/bin/pint --dirty --format agent
+npm run lint:check
+npm run types:check
+php artisan test --compact
+npm run build
+```
+
+## Deploy / Update Production
+
+Contoh update di LXC home server:
+
+```bash
+cd /path/ke/galaxycare
+git pull
+
+composer install --no-dev --optimize-autoloader
+npm ci
+npm run build
+
+php artisan migrate --force
+php artisan storage:link
+
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+sudo systemctl reload nginx
+sudo systemctl restart php8.5-fpm
+```
+
+Jika memakai queue worker:
+
+```bash
+php artisan queue:restart
+```
+
+## Environment Production
+
+Pastikan `.env` production tidak dipush dan berisi konfigurasi aman:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://sipaska.adakada.my.id
+FILESYSTEM_DISK=public
+```
+
+Pastikan document root web server mengarah ke folder `public`.
+
+## Keamanan
+
+- `.env` sudah di-ignore dan tidak boleh dipush.
+- Build frontend production sudah minified dan source map dimatikan lewat Vite.
+- Validasi request dilakukan di sisi Laravel.
+- Route admin dilindungi middleware admin.
+- File upload divalidasi sebagai gambar dengan batas ukuran.
+- Foto laporan disimpan di disk `public` dan file akan ikut dihapus saat laporan dihapus.
+
+Catatan: minify frontend membantu membuat JavaScript production lebih sulit dibaca, tetapi keamanan utama tetap berada di konfigurasi server, middleware Laravel, validasi request, permission file, dan environment production yang benar.
