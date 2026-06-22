@@ -76,7 +76,9 @@ export default function ReportsShow({ report }: Props) {
 
     function deleteReport() {
         if (confirm('Apakah Anda yakin ingin menghapus laporan ini?')) {
-            router.delete(`/${teamSlug}/reports/${report.id}`);
+            router.delete(`/${teamSlug}/reports/${report.id}`, {
+                preserveState: false,
+            });
         }
     }
 
@@ -158,7 +160,7 @@ export default function ReportsShow({ report }: Props) {
                                     <h2 className="text-xs font-bold tracking-wide text-primary uppercase">
                                         Respons Admin
                                     </h2>
-                                    <p className="mt-4 text-sm font-medium leading-relaxed whitespace-pre-wrap text-foreground">
+                                    <p className="mt-4 text-sm leading-relaxed font-medium whitespace-pre-wrap text-foreground">
                                         {report.admin_response}
                                     </p>
                                 </section>

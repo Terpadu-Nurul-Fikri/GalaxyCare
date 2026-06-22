@@ -85,8 +85,9 @@ class AdminReportController extends Controller
             'message' => "Laporan \"{$report->title}\" telah diubah statusnya menjadi {$statusLabels[$data['status']]}."
                 .($data['admin_response'] ? " Catatan: {$data['admin_response']}" : ''),
         ]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Status laporan berhasil diperbarui.')]);
 
-        return back()->with('success', 'Status laporan berhasil diperbarui.');
+        return back();
     }
 
     public function destroy(Team $currentTeam, Report $report): RedirectResponse
@@ -98,9 +99,9 @@ class AdminReportController extends Controller
         if ($photo) {
             Storage::disk('public')->delete($photo);
         }
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Laporan berhasil dihapus oleh admin.')]);
 
         return redirect()
-            ->route('admin.reports.index', ['current_team' => $currentTeam])
-            ->with('success', 'Laporan berhasil dihapus oleh admin.');
+            ->route('admin.reports.index', ['current_team' => $currentTeam]);
     }
 }

@@ -36,7 +36,8 @@ class NotificationController extends Controller
             ->notifications()
             ->where('is_read', false)
             ->update(['is_read' => true]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Semua notifikasi telah dibaca.')]);
 
-        return back()->with('success', 'Semua notifikasi telah dibaca.');
+        return back();
     }
 }

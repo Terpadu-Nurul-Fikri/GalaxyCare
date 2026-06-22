@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage, usePoll } from '@inertiajs/react';
 import { Bell, CheckCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -26,6 +26,10 @@ type Props = {
 };
 
 export default function NotificationsIndex({ notifications }: Props) {
+    usePoll(10000, {
+        only: ['notifications', 'unreadNotificationsCount'],
+    });
+
     const { currentTeam } = usePage().props as {
         currentTeam?: { slug: string };
     };

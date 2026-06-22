@@ -42,14 +42,16 @@ class AdminCampusInformationController extends Controller
             'is_published' => true,
             'published_at' => now(),
         ]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Informasi kampus berhasil dipublikasikan.')]);
 
-        return back()->with('success', 'Informasi kampus berhasil dipublikasikan.');
+        return back();
     }
 
     public function destroy(Team $currentTeam, CampusInformation $information): RedirectResponse
     {
         $information->delete();
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Informasi kampus berhasil dihapus.')]);
 
-        return back()->with('success', 'Informasi kampus berhasil dihapus.');
+        return back();
     }
 }

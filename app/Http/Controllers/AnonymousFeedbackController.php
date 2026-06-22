@@ -92,8 +92,9 @@ class AnonymousFeedbackController extends Controller
             ...$validated,
             'user_id' => $request->user()->id,
         ]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Thread forum berhasil dikirim.')]);
 
-        return back()->with('success', 'Thread forum berhasil dikirim!');
+        return back();
     }
 
     public function reply(Request $request, AnonymousFeedback $feedback): RedirectResponse
@@ -112,8 +113,9 @@ class AnonymousFeedbackController extends Controller
             ...$validated,
             'user_id' => $request->user()->id,
         ]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Balasan berhasil dikirim.')]);
 
-        return back()->with('success', 'Balasan berhasil dikirim.');
+        return back();
     }
 
     public function toggleReaction(Request $request, AnonymousFeedback $feedback): RedirectResponse

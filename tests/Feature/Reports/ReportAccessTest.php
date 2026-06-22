@@ -89,6 +89,9 @@ class ReportAccessTest extends TestCase
         $response->assertRedirect(route('reports.index', [
             'current_team' => $student->currentTeam,
         ]));
+        $response
+            ->assertInertiaFlash('toast.type', 'success')
+            ->assertInertiaFlash('toast.message', 'Laporan berhasil dikirim.');
 
         $report = Report::where('title', 'AC ruang kelas bocor')->firstOrFail();
 
@@ -116,7 +119,9 @@ class ReportAccessTest extends TestCase
             ]))
             ->assertRedirect(route('reports.index', [
                 'current_team' => $student->currentTeam,
-            ]));
+            ]))
+            ->assertInertiaFlash('toast.type', 'success')
+            ->assertInertiaFlash('toast.message', 'Laporan berhasil dihapus.');
 
         Storage::disk('public')->assertMissing($photoPath);
         $this->assertDatabaseMissing((new Report)->getTable(), [
@@ -144,7 +149,9 @@ class ReportAccessTest extends TestCase
             ]))
             ->assertRedirect(route('admin.reports.index', [
                 'current_team' => $admin->currentTeam,
-            ]));
+            ]))
+            ->assertInertiaFlash('toast.type', 'success')
+            ->assertInertiaFlash('toast.message', 'Laporan berhasil dihapus oleh admin.');
 
         Storage::disk('public')->assertMissing($photoPath);
         $this->assertDatabaseMissing((new Report)->getTable(), [

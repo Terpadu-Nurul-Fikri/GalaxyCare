@@ -4,6 +4,7 @@ namespace App\Http\Responses;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Laravel\Fortify\Fortify;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,7 @@ class LoginResponse implements LoginResponseContract
         }
 
         URL::defaults(['current_team' => $team->slug]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Berhasil masuk. Selamat datang kembali!')]);
 
         return $request->wantsJson()
             ? new JsonResponse(['two_factor' => false], 200)

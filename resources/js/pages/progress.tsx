@@ -1,4 +1,4 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePoll } from '@inertiajs/react';
 import {
     ArrowRight,
     CheckCircle,
@@ -93,6 +93,10 @@ export default function Progress({
     filters,
     campusInformation,
 }: Props) {
+    usePoll(15000, {
+        only: ['stats', 'reports', 'campusInformation'],
+    });
+
     const reportItems = reports?.data ?? [];
     const [search, setSearch] = useState(filters?.search ?? '');
     const hasActiveSearch = (filters?.search ?? '') !== '';
@@ -105,7 +109,7 @@ export default function Progress({
             { search: search.trim() },
             {
                 preserveScroll: true,
-                preserveState: true,
+                preserveState: false,
                 replace: true,
             },
         );
@@ -118,7 +122,7 @@ export default function Progress({
             {},
             {
                 preserveScroll: true,
-                preserveState: true,
+                preserveState: false,
                 replace: true,
             },
         );

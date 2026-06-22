@@ -38,7 +38,7 @@ export function AppSidebarHeader({
         router.get(
             reportSearchUrl,
             { search: search.trim() },
-            { preserveState: true },
+            { preserveState: false },
         );
     }
 

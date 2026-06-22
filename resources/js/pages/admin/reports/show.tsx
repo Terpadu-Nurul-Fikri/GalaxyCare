@@ -88,12 +88,21 @@ export default function AdminReportsShow({ report }: Props) {
 
     function submit(e: FormEvent) {
         e.preventDefault();
-        patch(`/${teamSlug}/admin/reports/${report.id}`);
+        patch(`/${teamSlug}/admin/reports/${report.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                router.reload({
+                    only: ['report', 'unreadNotificationsCount'],
+                });
+            },
+        });
     }
 
     function deleteReport() {
         if (confirm('Admin: Hapus laporan ini secara permanen?')) {
-            router.delete(`/${teamSlug}/admin/reports/${report.id}`);
+            router.delete(`/${teamSlug}/admin/reports/${report.id}`, {
+                preserveState: false,
+            });
         }
     }
 
@@ -163,7 +172,7 @@ export default function AdminReportsShow({ report }: Props) {
                             </div>
 
                             {/* Admin Action Form */}
-                            <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+                            <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
                                 <div className="border-b border-border bg-muted/30 px-6 py-4">
                                     <h2 className="font-extrabold text-foreground">
                                         Tindakan Admin
@@ -208,7 +217,7 @@ export default function AdminReportsShow({ report }: Props) {
                                                         className={`rounded-xl border-2 px-3 py-3 text-sm font-bold transition-all ${
                                                             isSelected
                                                                 ? `${sc.color} border-current ring-4 ring-current/10`
-                                                            : 'border-border text-muted-foreground hover:border-primary/50 hover:bg-muted'
+                                                                : 'border-border text-muted-foreground hover:border-primary/50 hover:bg-muted'
                                                         }`}
                                                     >
                                                         <span className="flex items-center justify-center gap-2">

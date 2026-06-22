@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage, usePoll } from '@inertiajs/react';
 import { Clock, Eye, FileText, Plus, Search, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
@@ -69,6 +69,10 @@ const categoryLabels: Record<string, string> = {
 };
 
 export default function ReportsIndex({ reports, filters }: Props) {
+    usePoll(10000, {
+        only: ['reports', 'unreadNotificationsCount'],
+    });
+
     const { currentTeam } = usePage().props as {
         currentTeam?: { slug: string };
     };
@@ -82,7 +86,7 @@ export default function ReportsIndex({ reports, filters }: Props) {
         router.get(
             `/${teamSlug}/reports`,
             { search: search.trim() || undefined },
-            { preserveState: true },
+            { preserveState: false },
         );
     }
 
@@ -247,6 +251,21 @@ export default function ReportsIndex({ reports, filters }: Props) {
                                                         ) {
                                                             router.delete(
                                                                 `/${teamSlug}/reports/${report.id}`,
+                                                                {
+                                                                    preserveScroll: true,
+                                                                    preserveState: false,
+                                                                    onSuccess:
+                                                                        () => {
+                                                                            router.reload(
+                                                                                {
+                                                                                    only: [
+                                                                                        'reports',
+                                                                                        'unreadNotificationsCount',
+                                                                                    ],
+                                                                                },
+                                                                            );
+                                                                        },
+                                                                },
                                                             );
                                                         }
                                                     }}

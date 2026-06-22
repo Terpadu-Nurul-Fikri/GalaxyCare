@@ -84,7 +84,7 @@ export function AppSidebar() {
                             className="h-14 p-0 hover:bg-transparent data-[active=true]:bg-transparent"
                         >
                             <Link href={dashboardUrl} prefetch>
-                                <AppLogo />
+                                <AppLogo variant="sidebar" />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>

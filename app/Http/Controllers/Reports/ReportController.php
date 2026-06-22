@@ -55,10 +55,10 @@ class ReportController extends Controller
         }
 
         $request->user()->reports()->create($data);
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Laporan berhasil dikirim.')]);
 
         return redirect()
-            ->route('reports.index', ['current_team' => $request->user()->currentTeam])
-            ->with('success', 'Laporan berhasil dikirim!');
+            ->route('reports.index', ['current_team' => $request->user()->currentTeam]);
     }
 
     public function show(Request $request, Team $currentTeam, Report $report): Response
@@ -85,9 +85,9 @@ class ReportController extends Controller
         if ($photo) {
             Storage::disk('public')->delete($photo);
         }
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Laporan berhasil dihapus.')]);
 
         return redirect()
-            ->route('reports.index', ['current_team' => $currentTeam])
-            ->with('success', 'Laporan berhasil dihapus.');
+            ->route('reports.index', ['current_team' => $currentTeam]);
     }
 }

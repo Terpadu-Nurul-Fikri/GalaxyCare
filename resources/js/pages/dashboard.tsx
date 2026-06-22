@@ -1,4 +1,4 @@
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, usePage, usePoll } from '@inertiajs/react';
 import {
     ArrowRight,
     BarChart3,
@@ -175,8 +175,7 @@ const userActions = [
         description: 'Laporkan fasilitas rusak atau kendala layanan kampus.',
         icon: PlusSquare,
         href: 'create',
-        className:
-            'border-primary bg-primary text-primary-foreground hover:opacity-90',
+        className: 'border-[#001e40] bg-[#001e40] text-white hover:bg-[#003366] dark:border-primary dark:bg-primary dark:text-primary-foreground dark:hover:opacity-90',
         iconClass: 'bg-white/20 text-white',
     },
     {
@@ -184,8 +183,7 @@ const userActions = [
         description: 'Lihat semua laporan yang pernah Anda kirim.',
         icon: ClipboardList,
         href: 'reports',
-        className:
-            'border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted/50',
+        className: 'border-border bg-card text-foreground hover:border-primary/50 hover:bg-muted/50',
         iconClass: 'bg-primary/10 text-primary',
     },
     {
@@ -193,8 +191,7 @@ const userActions = [
         description: 'Pantau laporan umum tanpa membuka detail privat.',
         icon: SearchCheck,
         href: '/progress',
-        className:
-            'border-border bg-card text-foreground hover:border-accent/50 hover:bg-muted/50',
+        className: 'border-border bg-card text-foreground hover:border-accent/50 hover:bg-muted/50',
         iconClass: 'bg-accent/10 text-accent',
     },
 ];
@@ -223,6 +220,16 @@ export default function Dashboard({
     campusInformation,
     isAdmin,
 }: Props) {
+    usePoll(15000, {
+        only: [
+            'stats',
+            'recentReports',
+            'recentFeedbacks',
+            'campusInformation',
+            'unreadNotificationsCount',
+        ],
+    });
+
     const { currentTeam, auth } = usePage().props as PageProps;
     const slug = currentTeam?.slug ?? '';
     const userName = auth?.user?.name?.split(' ')[0] ?? 'Pengguna';
@@ -271,7 +278,7 @@ export default function Dashboard({
                             <Link
                                 href={primaryActionHref}
                                 prefetch
-                                className="inline-flex w-full items-center justify-center gap-3 rounded-xl bg-accent px-5 py-3 text-sm font-bold text-accent-foreground shadow-sm transition hover:opacity-90 sm:w-auto"
+                                className="inline-flex w-full items-center justify-center gap-3 rounded-xl bg-[#001e40] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#003366] sm:w-auto dark:bg-accent dark:text-accent-foreground dark:hover:opacity-90"
                             >
                                 <PlusSquare className="size-5" />
                                 {isAdmin
@@ -343,7 +350,7 @@ export default function Dashboard({
                                     >
                                         {String(value).padStart(2, '0')}
                                     </p>
-                                    <p className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                                    <p className="mt-2 text-sm font-medium text-muted-foreground">
                                         {card.helper}
                                     </p>
                                 </article>
@@ -393,7 +400,7 @@ export default function Dashboard({
                     <section className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_22.5rem]">
                         <div className="min-w-0">
                             <div className="flex items-center justify-between gap-4">
-                                <h2 className="text-2xl font-extrabold text-slate-950 dark:text-white">
+                                <h2 className="text-2xl font-extrabold text-foreground">
                                     {isAdmin
                                         ? 'Laporan Terbaru Kampus'
                                         : 'Laporan Saya Terbaru'}
@@ -410,7 +417,7 @@ export default function Dashboard({
                             <div className="mt-6 flex flex-col gap-4">
                                 {recentReports.length === 0 ? (
                                     <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900">
-                                        <ClipboardList className="mx-auto size-12 text-slate-300" />
+                                        <ClipboardList className="mx-auto size-12 text-muted-foreground" />
                                         <p className="mt-4 font-bold text-slate-700 dark:text-slate-200">
                                             Belum ada laporan
                                         </p>
@@ -425,7 +432,7 @@ export default function Dashboard({
                                             <Link
                                                 href={`/${slug}/reports/create`}
                                                 prefetch
-                                                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white"
+                                                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
                                             >
                                                 Buat laporan pertama
                                             </Link>
@@ -472,7 +479,7 @@ export default function Dashboard({
                                                         <h3 className="mt-3 line-clamp-1 text-lg font-bold text-foreground transition-colors group-hover:text-primary">
                                                             {report.title}
                                                         </h3>
-                                                        <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground/80">
+                                                        <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
                                                             {report.description ??
                                                                 'Detail laporan dapat dilihat untuk meninjau status dan tindak lanjut.'}
                                                         </p>
@@ -532,7 +539,7 @@ export default function Dashboard({
                                                                             item.title
                                                                         }
                                                                     </h3>
-                                                                    <p className="mt-1 text-sm leading-6 text-muted-foreground/80">
+                                                                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
                                                                         {
                                                                             item.description
                                                                         }
@@ -550,7 +557,7 @@ export default function Dashboard({
                         </div>
 
                         <aside className="grid gap-6 md:grid-cols-2 xl:grid-cols-1">
-                            <section className="rounded-xl border border-slate-800 bg-slate-950 p-6 text-white shadow-lg dark:bg-slate-900">
+                            <section className="rounded-xl border border-[#12385f] bg-[#001e40] p-6 text-white shadow-lg dark:border-slate-800 dark:bg-slate-900">
                                 <h2 className="text-xl font-bold">
                                     {isAdmin
                                         ? 'Fokus Admin'
@@ -601,7 +608,7 @@ export default function Dashboard({
                                             : '/campus-information'
                                     }
                                     prefetch
-                                    className="mt-6 inline-flex w-full justify-center rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-white dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
+                                    className="mt-6 inline-flex w-full justify-center rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#001e40] transition hover:bg-blue-50 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
                                 >
                                     {isAdmin ? 'Buka Laporan' : 'Selengkapnya'}
                                 </Link>
@@ -657,7 +664,7 @@ export default function Dashboard({
                                     <h2 className="mt-1 text-2xl font-extrabold text-foreground">
                                         Aspirasi Fasilitas Kampus
                                     </h2>
-                                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground/80">
+                                    <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
                                         Ringkasan kritik, saran, dan aspirasi
                                         terbaru yang bisa dilihat admin maupun
                                         user biasa.
@@ -666,7 +673,7 @@ export default function Dashboard({
                                 <Link
                                     href="/forum"
                                     prefetch
-                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition hover:opacity-90"
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#001e40] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#003366] dark:bg-primary dark:text-primary-foreground dark:hover:opacity-90"
                                 >
                                     <Send className="size-4" />
                                     Buka Forum
@@ -676,7 +683,7 @@ export default function Dashboard({
                             <div className="mt-6 grid gap-3 md:grid-cols-2">
                                 {recentFeedbacks.length === 0 ? (
                                     <div className="rounded-xl border border-dashed border-border p-8 text-center md:col-span-2">
-                                        <MessageSquare className="mx-auto size-10 text-muted" />
+                                        <MessageSquare className="mx-auto size-10 text-muted-foreground" />
                                         <p className="mt-3 text-sm font-semibold text-muted-foreground">
                                             Belum ada aspirasi publik.
                                         </p>
@@ -706,7 +713,7 @@ export default function Dashboard({
                                                     )}
                                                 </span>
                                             </div>
-                                            <p className="mt-3 line-clamp-3 text-sm leading-6 text-foreground/80">
+                                            <p className="mt-3 line-clamp-3 text-sm leading-6 text-foreground">
                                                 {feedback.message}
                                             </p>
                                             {feedback.admin_reply && (

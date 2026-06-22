@@ -65,7 +65,13 @@ export default function AdminCampusInformationIndex({
 
         post(`/${teamSlug}/admin/campus-information`, {
             preserveScroll: true,
-            onSuccess: () => reset(),
+            preserveState: false,
+            onSuccess: () => {
+                reset();
+                router.reload({
+                    only: ['campusInformation'],
+                });
+            },
         });
     }
 
@@ -78,6 +84,12 @@ export default function AdminCampusInformationIndex({
             `/${teamSlug}/admin/campus-information/${information.id}`,
             {
                 preserveScroll: true,
+                preserveState: false,
+                onSuccess: () => {
+                    router.reload({
+                        only: ['campusInformation'],
+                    });
+                },
             },
         );
     }

@@ -1,5 +1,6 @@
 import type { Auth } from '@/types/auth';
 import type { Team } from '@/types/teams';
+import type { FlashToast } from '@/types/ui';
 
 declare module '@inertiajs/core' {
     export interface InertiaConfig {
@@ -7,6 +8,7 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             flash: {
+                toast?: FlashToast | null;
                 success: string | null;
                 error: string | null;
             };

@@ -1,4 +1,11 @@
-import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
+import {
+    Head,
+    Link,
+    router,
+    useForm,
+    usePage,
+    usePoll,
+} from '@inertiajs/react';
 import {
     EyeOff,
     Heart,
@@ -69,9 +76,12 @@ const categoryStyle = {
 };
 
 export default function Forum({ feedbacks, campusInformation }: Props) {
-    const { auth, flash } = usePage().props as {
+    usePoll(15000, {
+        only: ['feedbacks', 'campusInformation'],
+    });
+
+    const { auth } = usePage().props as {
         auth?: { user?: unknown };
-        flash?: { success?: string };
     };
     const { data, setData, post, processing, errors, reset } = useForm({
         message: '',
@@ -123,11 +133,39 @@ export default function Forum({ feedbacks, campusInformation }: Props) {
             return;
         }
 
-        router.post(
-            `/forum/${feedbackId}/reactions`,
-            { type: 'like' },
-            { preserveScroll: true },
-        );
+        const feedback = feedbacks.data.find((item) => item.id === feedbackId);
+
+        router
+            .optimistic((props) => ({
+                feedbacks: {
+                    ...(props as { feedbacks: Props['feedbacks'] }).feedbacks,
+                    data: (
+                        props as { feedbacks: Props['feedbacks'] }
+                    ).feedbacks.data.map((item: Feedback) =>
+                        item.id === feedbackId
+                            ? {
+                                  ...item,
+                                  liked_by_me: !item.liked_by_me,
+                                  likes_count:
+                                      item.likes_count +
+                                      (item.liked_by_me ? -1 : 1),
+                              }
+                            : item,
+                    ),
+                },
+            }))
+            .post(
+                `/forum/${feedbackId}/reactions`,
+                { type: 'like' },
+                {
+                    preserveScroll: true,
+                    onError: () => {
+                        if (feedback) {
+                            router.reload({ only: ['feedbacks'] });
+                        }
+                    },
+                },
+            );
     }
 
     async function shareThread(feedbackId: number): Promise<void> {
@@ -213,14 +251,6 @@ export default function Forum({ feedbacks, campusInformation }: Props) {
                             </span>
                         </div>
                     </AnimateIn>
-
-                    {flash?.success && (
-                        <AnimateIn>
-                            <div className="mt-4 rounded-lg border border-green-100 bg-green-50 p-3 text-sm text-green-700 dark:border-green-900/60 dark:bg-green-950/40 dark:text-green-200">
-                                Berhasil. {flash.success}
-                            </div>
-                        </AnimateIn>
-                    )}
 
                     {isAuthenticated && showForm && (
                         <AnimateIn>

@@ -1,4 +1,4 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage, usePoll } from '@inertiajs/react';
 import {
     AlertCircle,
     CheckCircle,
@@ -130,6 +130,10 @@ const statCards = [
 ] as const;
 
 export default function AdminReportsIndex({ reports, stats, filters }: Props) {
+    usePoll(10000, {
+        only: ['reports', 'stats', 'unreadNotificationsCount'],
+    });
+
     const { currentTeam } = usePage().props as {
         currentTeam?: { slug: string };
     };
@@ -141,7 +145,7 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
         router.get(
             `/${teamSlug}/admin/reports`,
             { search, status: filters.status, category: filters.category },
-            { preserveState: true },
+            { preserveState: false },
         );
     }
 
@@ -149,7 +153,7 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
         router.get(
             `/${teamSlug}/admin/reports`,
             { status, category: filters.category, search: filters.search },
-            { preserveState: true },
+            { preserveState: false },
         );
     }
 
@@ -157,7 +161,7 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
         router.get(
             `/${teamSlug}/admin/reports`,
             { status: filters.status, category, search: filters.search },
-            { preserveState: true },
+            { preserveState: false },
         );
     }
 
@@ -380,6 +384,22 @@ export default function AdminReportsIndex({ reports, stats, filters }: Props) {
                                                             ) {
                                                                 router.delete(
                                                                     `/${teamSlug}/admin/reports/${report.id}`,
+                                                                    {
+                                                                        preserveScroll: true,
+                                                                        preserveState: false,
+                                                                        onSuccess:
+                                                                            () => {
+                                                                                router.reload(
+                                                                                    {
+                                                                                        only: [
+                                                                                            'reports',
+                                                                                            'stats',
+                                                                                            'unreadNotificationsCount',
+                                                                                        ],
+                                                                                    },
+                                                                                );
+                                                                            },
+                                                                    },
                                                                 );
                                                             }
                                                         }}
